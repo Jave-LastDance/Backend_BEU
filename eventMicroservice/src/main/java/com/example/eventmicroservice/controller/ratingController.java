@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/ratingPUJ")
+@RequestMapping("/eventosPUJ/ratingPUJ")
 public class ratingController {
     @Autowired
     ratingeventService ratingeventService;
@@ -19,9 +19,9 @@ public class ratingController {
     RestTemplate restTemplate;
 
     /**
-     * Retrieves a list of ratingevent objects based on the provided event ID.
+     * Retrieves a list of ratingevent objects based on the provided eventDB ID.
      * It calls the getRatingPerEvent method from the ratingeventService to fetch
-     * the ratings for the given event ID. If ratings are found, it responds with
+     * the ratings for the given eventDB ID. If ratings are found, it responds with
      * a list of ratingevent objects and HTTP status OK. If no ratings are found,
      * it responds with a BAD REQUEST status.
      * @param idEvent
@@ -37,11 +37,12 @@ public class ratingController {
         return  new ResponseEntity<>(ratingeventsFound, HttpStatus.OK);
     }
 
+
     /**
      *Retrieves a ratingevent object based on the provided user ID. It calls the
      * getRatingPerUser method from the ratingeventService to fetch the rating
-     * event for the given user ID and event ID. If a rating event is found, it responds with
-     * the ratingevent object and HTTP status OK. If no rating event is found for
+     * eventDB for the given user ID and eventDB ID. If a rating eventDB is found, it responds with
+     * the ratingevent object and HTTP status OK. If no rating eventDB is found for
      * the user, it responds with a BAD REQUEST status.
      * @param idUser
      * @param  idEvent
@@ -58,11 +59,11 @@ public class ratingController {
     }
 
     /**
-     * Updates the rating of an event. It expects a ratingevent object in the request body.
+     * Updates the rating of an eventDB. It expects a ratingevent object in the request body.
      * It calls the save method from the ratingeventService to update the rating for the
-     * specified event and user. If the operation is successful, it responds with a message
-     * indicating the successful modification. If the event doesn't exist, it responds with
-     * a BAD REQUEST status. Also updates the promRating of an event each time the rating is modified.
+     * specified eventDB and user. If the operation is successful, it responds with a message
+     * indicating the successful modification. If the eventDB doesn't exist, it responds with
+     * a BAD REQUEST status. Also updates the promRating of an eventDB each time the rating is modified.
      * @param ratingeventUpdate
      * @return
      */
@@ -78,11 +79,11 @@ public class ratingController {
     }
 
     /**
-     * Adds a new rating for an event. It expects a ratingevent object in the request body.
+     * Adds a new rating for an eventDB. It expects a ratingevent object in the request body.
      * It calls the newRating method from the ratingeventService to add a new rating for the
-     * provided event and user. If the operation is successful, it responds with a message
-     * indicating the successful addition of the rating. If the user has already rated the event,
-     * it responds with a BAD REQUEST status. Also updates the promRating of an event each time
+     * provided eventDB and user. If the operation is successful, it responds with a message
+     * indicating the successful addition of the rating. If the user has already rated the eventDB,
+     * it responds with a BAD REQUEST status. Also updates the promRating of an eventDB each time
      * the rating is added.
      * @param ratingeventUpdate
      * @return
@@ -99,8 +100,8 @@ public class ratingController {
     }
 
     /**
-     * This private method is used to update the average rating of an event on a different service.
-     * It prepares a request containing the event ID and the calculated average rating (promRating).
+     * This private method is used to update the average rating of an eventDB on a different service.
+     * It prepares a request containing the eventDB ID and the calculated average rating (promRating).
      * It sends a POST request to another service (http://localhost:8081/eventosPUJ/evento/nuevo/rating)
      * using RestTemplate.
      * @param idEvent
@@ -123,6 +124,17 @@ public class ratingController {
                 String.class
         );
     }
+
+    /**
+     * Returns a list of all the ratings
+     * @return
+     */
+    @GetMapping("/calificaciones")
+    public ResponseEntity<List<ratingevent>> getRatingEvent(){
+        return new ResponseEntity<>(ratingeventService.getAll(),HttpStatus.OK);
+    }
+
+
 
 
 

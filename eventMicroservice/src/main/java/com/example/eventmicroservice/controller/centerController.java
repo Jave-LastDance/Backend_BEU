@@ -2,19 +2,27 @@ package com.example.eventmicroservice.controller;
 
 import com.example.eventmicroservice.entity.center;
 import com.example.eventmicroservice.service.centerService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/centrosPUJ")
+@RequestMapping("/eventosPUJ/centrosPUJ")
 public class centerController {
 
     @Autowired
     centerService centerService;
+
+    @Autowired
+    RestTemplate restTemplate;
 
     /**
      * Retrieves a list of all center objects. It calls the getAllCenter method from
@@ -25,6 +33,17 @@ public class centerController {
     @GetMapping("/centros")
     public ResponseEntity<List<center>> getAllCenter(){
         return  new ResponseEntity<>(centerService.getAllCenter(), HttpStatus.OK);
+    }
+
+    /**
+     * Retrieves a list of all center names. It calls the getAllNames method from
+     * the centerService to fetch a list of all names. It responds with the list of
+     *  center names and HTTP status OK.
+     * @return
+     */
+    @GetMapping("/centros/nombres")
+    public ResponseEntity<List<String>> getAllCenterNames(){
+        return  new ResponseEntity<>(centerService.getAllNames(), HttpStatus.OK);
     }
 
     /**
@@ -62,7 +81,6 @@ public class centerController {
         }
         return  new ResponseEntity<>("Cambio realizado correctamente", HttpStatus.OK);
     }
-
 
 
 }

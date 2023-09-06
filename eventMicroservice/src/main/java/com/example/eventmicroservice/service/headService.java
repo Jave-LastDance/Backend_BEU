@@ -14,6 +14,12 @@ public class headService {
     headRepository headRepository;
 
     /**
+     * This method retrieves all heads
+     * @return
+     */
+    public List<head> getAll(){return  headRepository.findAll();}
+
+    /**
      *This method retrieves a list of head objects associated with a specific user ID. It calls
      * the getByIdUser method from the headRepository to fetch all heads associated with the provided
      * idUser. It returns the list of head objects.

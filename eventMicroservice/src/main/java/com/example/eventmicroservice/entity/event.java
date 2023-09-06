@@ -1,274 +1,326 @@
 package com.example.eventmicroservice.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
-@Table (name = "event")
-public class
-event {
+public class event {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_event")
-    private Integer idEvent;
+    private Integer id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "requirements")
+    private String tags;
+
+    private String public_type;
+
     private String requirements;
 
-    @Column(name = "place")
-    private String place;
+    private Integer duration;
 
-    @Column(name = "capacity")
+    private String location;
+
     private Integer capacity;
 
-    @Column(name = "method")
-    private String method;
+    private String mode;
 
-    @Column(name = "state")
     private String state;
 
-    @Column(name = "type")
-    private String type;
+    private String category;
 
-    @Column(name = "date_start")
-    private Date dateStart;
+    private String topic;
 
-    @Column(name = "date_end")
-    private Date dateEnd;
+    private Integer cycle;
 
-    @Column(name = "period")
-    private String period;
+    private Integer prom_rating;
 
-    @Column(name = "date_start_post")
-    private Date dateStartPost;
+    private Date date_start;
 
-    @Column(name = "date_end_post")
-    private Date dateEndPost;
+    private Date date_end;
 
-    @Column(name = "length")
-    private String length;
+    private Time time_start;
 
-    @Column(name = "url_event")
-    private String urlEvent;
+    private Time time_end;
 
-    @Column(name = "url_poster")
-    private String urlPoster;
+    private Date date_start_post;
 
+    private Float price;
 
+    private String url_event;
 
-    @Column(name = "Headid_head")
-    private Integer HeadidHead;
+    private String url_poster;
 
-    @Column(name = "Centerid_unity")
-    private Integer CenteridUnity;
-
-    @Column(name = "prom_rating")
-    private Integer promRating;
-
-    @Column(name = "url_photos")
     private String url_photos;
+
+    private String head_email;
+
+    private String name_center;
+
+    private List<ratingevent> rating;
+
+    private List<commentevent> reviews;
 
     public event() {
     }
 
-    public event(Integer idEvent, String name, String description, String requirements, String place, Integer capacity, String method, String state, String type, Date dateStart, Date dateEnd, String period, Date dateStartPost, Date dateEndPost, String length, String urlEvent, String urlPoster, Integer headidHead, Integer centeridUnity, Integer promRating, String url_photos) {
-        this.idEvent = idEvent;
+    public event(Integer id, String name, String description, String tags, String public_type, String requirements, Integer duration, String location, Integer capacity, String mode, String state, String category, String topic, Integer cycle, Integer prom_rating, Date date_start, Date date_end, Time time_start, Time time_end, Date date_start_post, Float price, String url_event, String url_poster, String url_photos, String head_email, String name_center, List<ratingevent> rating, List<commentevent> reviews) {
+        this.id = id;
         this.name = name;
         this.description = description;
+        this.tags = tags;
+        this.public_type = public_type;
         this.requirements = requirements;
-        this.place = place;
+        this.duration = duration;
+        this.location = location;
         this.capacity = capacity;
-        this.method = method;
+        this.mode = mode;
         this.state = state;
-        this.type = type;
-        this.dateStart = dateStart;
-        this.dateEnd = dateEnd;
-        this.period = period;
-        this.dateStartPost = dateStartPost;
-        this.dateEndPost = dateEndPost;
-        this.length = length;
-        this.urlEvent = urlEvent;
-        this.urlPoster = urlPoster;
-        HeadidHead = headidHead;
-        CenteridUnity = centeridUnity;
-        this.promRating = promRating;
+        this.category = category;
+        this.topic = topic;
+        this.cycle = cycle;
+        this.prom_rating = prom_rating;
+        this.date_start = date_start;
+        this.date_end = date_end;
+        this.time_start = time_start;
+        this.time_end = time_end;
+        this.date_start_post = date_start_post;
+        this.price = price;
+        this.url_event = url_event;
+        this.url_poster = url_poster;
         this.url_photos = url_photos;
+        this.head_email = head_email;
+        this.name_center = name_center;
+        this.rating = new ArrayList<>();;
+        this.reviews =new ArrayList<>();
     }
 
-    public Integer getIdEvent() {
-        return idEvent;
-    }
 
-    public void setIdEvent(Integer idEvent) {
-        this.idEvent = idEvent;
-    }
-
-    public String getName() {
-        return name;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getRequirements() {
-        return requirements;
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public void setPublic_type(String public_type) {
+        this.public_type = public_type;
     }
 
     public void setRequirements(String requirements) {
         this.requirements = requirements;
     }
 
-    public String getPlace() {
-        return place;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
 
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public String getState() {
-        return state;
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 
     public void setState(String state) {
         this.state = state;
     }
 
-    public String getType() {
-        return type;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
-    public Date getDateStart() {
-        return dateStart;
+    public void setCycle(Integer cycle) {
+        this.cycle = cycle;
     }
 
-    public void setDateStart(Date dateStart) {
-        this.dateStart = dateStart;
+    public void setProm_rating(Integer prom_rating) {
+        this.prom_rating = prom_rating;
     }
 
-    public Date getDateEnd() {
-        return dateEnd;
+    public void setDate_start(Date date_start) {
+        this.date_start = date_start;
     }
 
-    public void setDateEnd(Date dateEnd) {
-        this.dateEnd = dateEnd;
+    public void setDate_end(Date date_end) {
+        this.date_end = date_end;
     }
 
-    public String getPeriod() {
-        return period;
+    public void setTime_start(Time time_start) {
+        this.time_start = time_start;
     }
 
-    public void setPeriod(String period) {
-        this.period = period;
+    public void setTime_end(Time time_end) {
+        this.time_end = time_end;
     }
 
-    public Date getDateStartPost() {
-        return dateStartPost;
+    public void setDate_start_post(Date date_start_post) {
+        this.date_start_post = date_start_post;
     }
 
-    public void setDateStartPost(Date dateStartPost) {
-        this.dateStartPost = dateStartPost;
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
-    public Date getDateEndPost() {
-        return dateEndPost;
+    public void setUrl_event(String url_event) {
+        this.url_event = url_event;
     }
 
-    public void setDateEndPost(Date dateEndPost) {
-        this.dateEndPost = dateEndPost;
+    public void setUrl_poster(String url_poster) {
+        this.url_poster = url_poster;
     }
 
-    public String getLength() {
-        return length;
+    public void setUrl_photos(String url_photos) {
+        this.url_photos = url_photos;
     }
 
-    public void setLength(String length) {
-        this.length = length;
+    public void setHead_email(String head_email) {
+        this.head_email = head_email;
     }
 
-    public String getUrlEvent() {
-        return urlEvent;
+    public void setName_center(String name_center) {
+        this.name_center = name_center;
     }
 
-    public void setUrlEvent(String urlEvent) {
-        this.urlEvent = urlEvent;
+    public void setRating(List<ratingevent> rating) {
+        this.rating = rating;
     }
 
-    public String getUrlPoster() {
-        return urlPoster;
+    public void setReviews(List<commentevent> reviews) {
+        this.reviews = reviews;
     }
 
-    public void setUrlPoster(String urlPoster) {
-        this.urlPoster = urlPoster;
+    public Integer getId() {
+        return id;
     }
 
-    public Integer getHeadidHead() {
-        return HeadidHead;
+    public String getName() {
+        return name;
     }
 
-    public void setHeadidHead(Integer headidHead) {
-        HeadidHead = headidHead;
+    public String getDescription() {
+        return description;
     }
 
-    public Integer getCenteridUnity() {
-        return CenteridUnity;
+    public String getTags() {
+        return tags;
     }
 
-    public void setCenteridUnity(Integer centeridUnity) {
-        CenteridUnity = centeridUnity;
+    public String getPublic_type() {
+        return public_type;
     }
 
-    public Integer getPromRating() {
-        return promRating;
+    public String getRequirements() {
+        return requirements;
     }
 
-    public void setPromRating(Integer promRating) {
-        this.promRating = promRating;
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public Integer getCycle() {
+        return cycle;
+    }
+
+    public Integer getProm_rating() {
+        return prom_rating;
+    }
+
+    public Date getDate_start() {
+        return date_start;
+    }
+
+    public Date getDate_end() {
+        return date_end;
+    }
+
+    public Time getTime_start() {
+        return time_start;
+    }
+
+    public Time getTime_end() {
+        return time_end;
+    }
+
+    public Date getDate_start_post() {
+        return date_start_post;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public String getUrl_event() {
+        return url_event;
+    }
+
+    public String getUrl_poster() {
+        return url_poster;
     }
 
     public String getUrl_photos() {
         return url_photos;
     }
 
-    public void setUrl_photos(String url_photos) {
-        this.url_photos = url_photos;
+    public String getHead_email() {
+        return head_email;
+    }
+
+    public String getName_center() {
+        return name_center;
+    }
+
+    public List<ratingevent> getRating() {
+        return rating;
+    }
+
+    public List<commentevent> getReviews() {
+        return reviews;
     }
 }

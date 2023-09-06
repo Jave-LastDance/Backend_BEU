@@ -5,6 +5,7 @@ import com.example.eventmicroservice.repository.centerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +21,18 @@ public class centerService {
     public List<center> getAllCenter(){
 
         return centerRepository.findAll();
+    }
+    /**
+     * This method retrieves a list of all center objects from the repository
+     * using the centerRepository. It returns the list of the names of each one.
+     * @return
+     */
+    public List<String> getAllNames(){
+        List<String> auxNames=new ArrayList<>();
+        for(center auxCenter: getAllCenter()){
+            auxNames.add(auxCenter.getUnityName());
+        }
+        return  auxNames;
     }
 
     /**
@@ -78,6 +91,5 @@ public class centerService {
         }
         return operationSuccess;
     }
-
 
 }

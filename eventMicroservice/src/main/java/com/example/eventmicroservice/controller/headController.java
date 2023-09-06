@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/encargadoPUJ")
+@RequestMapping("/eventosPUJ/encargadoPUJ")
 public class headController {
 
 
@@ -68,6 +71,9 @@ public class headController {
         return  new ResponseEntity<>("Se ha modificado correctamente", HttpStatus.OK);
     }
 
-
+    @GetMapping("/encargados")
+    public ResponseEntity<List<head>> getAll(){
+        return new ResponseEntity<>(headService.getAll(),HttpStatus.OK);
+    }
 
 }

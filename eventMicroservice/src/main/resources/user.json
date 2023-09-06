@@ -1,0 +1,42 @@
+[
+    {
+        "id": "1",
+        "name": "Chiara",
+        "surname": "Bonivento",
+        "rol": "estudiante",
+        "program": "ingenieria",
+        "email": "chaira@javeriana.edu.co"
+    },
+    {
+        "id": "2",
+        "name": "Luis",
+        "surname": "Vasquez",
+        "rol": "estudiante",
+        "program": "derecho",
+        "email": "luisv@javeriana.edu.co "
+    },
+    {
+        "id": "3",
+        "name": "Emilia ",
+        "surname": "Arias",
+        "rol": "administrativo",
+        "program": "",
+        "email": "emilia@javeriana.edu.co"
+    },
+    {
+        "id": "4",
+        "name": "Jeronimo",
+        "surname": "Garces",
+        "rol": "profesor ",
+        "program": "",
+        "email": "jeronimo@javeriana.edu.co",
+    }, 
+    {
+        "id": "5",
+        "name": "Ana",
+        "surname": "Galvez",
+        "rol": "profesor ",
+        "program": "",
+        "email": "anagal@javeriana.edu.co"
+    }
+]

@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comentarioPUJ")
+@RequestMapping("/eventosPUJ/comentarioPUJ")
 public class commentController {
 
     @Autowired
     commenteventService commenteventService;
 
     /**
-     * This method handles a GET request to retrieve all comments associated with a specific event.
+     * This method handles a GET request to retrieve all comments associated with a specific eventDB.
      * It takes the idEvent path variable, retrieves comments using the commenteventService, and
      * returns a response entity containing the list of comments if they exist. If no comments are found,
      * it returns a BAD REQUEST response.
@@ -34,10 +34,10 @@ public class commentController {
     }
 
     /**
-     * This method handles a POST request to add a new comment related to an event. It takes a
+     * This method handles a POST request to add a new comment related to an eventDB. It takes a
      * commentevent object in the request body, calls the newComment method from commenteventService,
      * and returns a response entity indicating whether the comment was successfully added. If a comment
-     * from the same user for the same event already exists, it returns a BAD REQUEST response.
+     * from the same user for the same eventDB already exists, it returns a BAD REQUEST response.
      * @param commenteventNew
      * @return
      */
@@ -64,7 +64,7 @@ public class commentController {
     }
 
     /**
-     * This method handles a DELETE request to delete a comment associated with a specific event and
+     * This method handles a DELETE request to delete a comment associated with a specific eventDB and
      * user. It takes idEvent and idUser as path variables, calls the deleteComment method from
      * commenteventService, and returns a response entity indicating that the comment was successfully
      * deleted.
@@ -76,5 +76,14 @@ public class commentController {
     public ResponseEntity<String> commentDelete(@PathVariable Integer idEvent, @PathVariable Integer idUser){
         commenteventService.deleteComment(idEvent,idUser);
         return new ResponseEntity<>("Eliminado correctamente", HttpStatus.OK);
+    }
+
+    /**
+     * Returns a list of all the reviews
+     * @return
+     */
+    @GetMapping("/comentarios")
+    public ResponseEntity<List<commentevent>> getAll(){
+       return new ResponseEntity<>(commenteventService.getAll(),HttpStatus.OK);
     }
 }

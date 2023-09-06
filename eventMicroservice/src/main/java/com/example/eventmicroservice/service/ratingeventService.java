@@ -15,9 +15,19 @@ public class ratingeventService {
     ratingeventRepository ratingeventRepository;
 
     /**
-     * This method retrieves a list of ratingevent objects for a given event ID.
+     * This method retrieves all ratings
+     * @return
+     */
+
+    public List<ratingevent> getAll(){
+        return ratingeventRepository.findAll();
+    }
+
+
+    /**
+     * This method retrieves a list of ratingevent objects for a given eventDB ID.
      * It iterates through all ratingevent objects in the repository and collects
-     * those that match the provided event ID. The collected list of ratingevent
+     * those that match the provided eventDB ID. The collected list of ratingevent
      * objects is returned.
      * @param idEvent
      * @return
@@ -35,8 +45,8 @@ public class ratingeventService {
 
     /**
      * This method retrieves a specific ratingevent object based on the provided user
-     * ID and event ID. It iterates through all ratingevent objects in the repository
-     * and returns the ratingevent object that matches both the user ID and event ID.
+     * ID and eventDB ID. It iterates through all ratingevent objects in the repository
+     * and returns the ratingevent object that matches both the user ID and eventDB ID.
      * If no match is found, it returns null.
      * @param idUser
      * @param idEvent
@@ -57,8 +67,8 @@ public class ratingeventService {
     }
 
     /**
-     * This method collects all grades (ratings) for a given event ID. It uses the
-     * getRatingPerEvent method to fetch all ratingevent objects for the event and
+     * This method collects all grades (ratings) for a given eventDB ID. It uses the
+     * getRatingPerEvent method to fetch all ratingevent objects for the eventDB and
      * extracts their grades. The collected list of grades is returned.
      * @param idEvent
      * @return
@@ -72,7 +82,7 @@ public class ratingeventService {
     }
 
     /**
-     * This method calculates the average (promedio) rating for a given event ID.
+     * This method calculates the average (promedio) rating for a given eventDB ID.
      * It uses the getAllGrades method to collect all grades, calculates their sum,
      * and then divides the sum by the total number of grades to get the average.
      * The calculated average rating is returned.
@@ -90,8 +100,8 @@ public class ratingeventService {
 
     /**
      * This method updates an existing ratingevent object's grade based on the provided
-     * event ID and user ID. It iterates through all ratingevent objects and finds the
-     * one with matching event and user IDs. It updates the grade and saves the updated
+     * eventDB ID and user ID. It iterates through all ratingevent objects and finds the
+     * one with matching eventDB and user IDs. It updates the grade and saves the updated
      * object to the repository. Returns true if the operation is successful, otherwise
      * false.
      * @param idEvent
@@ -114,8 +124,8 @@ public class ratingeventService {
 
     /**
      * This method adds a new ratingevent object to the repository if the user hasn't
-     * rated the event before. It iterates through all ratingevent objects and checks
-     * if there's already a rating by the same user. If the user hasn't rated the event,
+     * rated the eventDB before. It iterates through all ratingevent objects and checks
+     * if there's already a rating by the same user. If the user hasn't rated the eventDB,
      * it saves the new ratingevent object. Returns true if the operation is successful
      * (i.e., the user hasn't rated before), otherwise false.
      * @param ratingeventNew
