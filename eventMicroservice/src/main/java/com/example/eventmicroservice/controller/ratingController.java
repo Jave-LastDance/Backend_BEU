@@ -3,7 +3,7 @@ package com.example.eventmicroservice.controller;
 import com.example.eventmicroservice.entity.ratingevent;
 import com.example.eventmicroservice.service.ratingeventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
