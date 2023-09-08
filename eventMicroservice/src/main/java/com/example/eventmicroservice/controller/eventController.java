@@ -64,9 +64,10 @@ public class eventController {
      * @param idCenter
      * @return
      */
-    @GetMapping("/evento/centro/{idCenter}")
-    public ResponseEntity<List<event>> getEventPerCenter(@PathVariable Integer idCenter){
-        List<eventDB> auxEventDB =eventService.getAllEventByCenterId(idCenter);
+    @GetMapping("/evento/centro/{nameCenter}")
+    public ResponseEntity<List<event>> getEventPerCenter(@PathVariable String nameCenter){
+        Integer auxIdCenter=findCenterId(getCenterId(),nameCenter);
+        List<eventDB> auxEventDB =eventService.getAllEventByCenterId(auxIdCenter);
         if(auxEventDB.isEmpty()){
             return  new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
