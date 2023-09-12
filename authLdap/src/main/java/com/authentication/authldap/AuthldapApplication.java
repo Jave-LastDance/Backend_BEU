@@ -1,13 +1,13 @@
-package com.auth.authLdap;
+package com.authentication.authldap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuthLdapApplication {
+public class AuthldapApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AuthLdapApplication.class, args);
+		SpringApplication.run(AuthldapApplication.class, args);
 	}
 
 }
