@@ -61,7 +61,7 @@ public class eventController {
     /**
      * This method handles a GET request to retrieve all events associated with a specific center based on its idCenter. It returns a response entity containing
      * the list of events associated with the center.
-     * @param idCenter
+     * @param nameCenter
      * @return
      */
     @GetMapping("/evento/centro/{nameCenter}")
@@ -248,6 +248,7 @@ public class eventController {
                 eventDBAux.getUrl_photos(),
                 findHeadEmail(users, auxHead, eventDBAux.getHeadidHead()),
                 findCenterName(auxCenter, eventDBAux.getCenteridUnity()),
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
         );
@@ -472,6 +473,7 @@ public class eventController {
                 event newEvent = transformEventDBToEvent(eventHelp);
                 newEvent.setRating(getRatingEvent(eventHelp.getId()));
                 newEvent.setReviews(getCommentEvent(eventHelp.getId()));
+                newEvent.setActivities(getActivities(eventHelp.getId()));
                 eventAux.add(newEvent);
             }
         return eventAux;
@@ -487,8 +489,25 @@ public class eventController {
         event newEvent = transformEventDBToEvent(eventDBAux);
         newEvent.setRating(getRatingEvent(eventDBAux.getId()));
         newEvent.setReviews(getCommentEvent(eventDBAux.getId()));
+        newEvent.setActivities(getActivities(eventDBAux.getId()));
         return newEvent;
     }
+
+
+    private List<activity> getActivities( Integer idEvent){
+        ResponseEntity<List<activity>> responseEntity = restTemplate.exchange(
+                "http://localhost:8081/eventosPUJ/actividadesPUJ/actividades/evento/"+idEvent,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<activity>>() {}
+        );
+
+        List<activity> auxActivities = responseEntity.getBody();
+
+        return  auxActivities;
+
+    }
+
 
 
     private List<user> createUsers(){

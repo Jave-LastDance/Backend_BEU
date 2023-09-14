@@ -90,6 +90,10 @@ eventDB {
     @Column(name = "Centerid_unity")
     private Integer CenteridUnity;
 
+    @Column(name = "id_beacon")
+    private Integer id_beacon;
+
+
 
     public eventDB() {
     }
@@ -121,6 +125,14 @@ eventDB {
         this.url_photos = url_photos;
         HeadidHead = headidHead;
         CenteridUnity = centeridUnity;
+    }
+
+    public Integer getId_beacon() {
+        return id_beacon;
+    }
+
+    public void setId_beacon(Integer id_beacon) {
+        this.id_beacon = id_beacon;
     }
 
     public Integer getId() {
@@ -331,5 +343,36 @@ eventDB {
         CenteridUnity = centeridUnity;
     }
 
-
+    @Override
+    public String toString() {
+        return "eventDB{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", tags='" + tags + '\'' +
+                ", public_type='" + public_type + '\'' +
+                ", requirements='" + requirements + '\'' +
+                ", duration=" + duration +
+                ", location='" + location + '\'' +
+                ", capacity=" + capacity +
+                ", mode='" + mode + '\'' +
+                ", state='" + state + '\'' +
+                ", category='" + category + '\'' +
+                ", topic='" + topic + '\'' +
+                ", cycle=" + cycle +
+                ", prom_rating=" + prom_rating +
+                ", date_start=" + date_start +
+                ", date_end=" + date_end +
+                ", time_start=" + time_start +
+                ", time_end=" + time_end +
+                ", date_start_post=" + date_start_post +
+                ", price=" + price +
+                ", url_event='" + url_event + '\'' +
+                ", url_poster='" + url_poster + '\'' +
+                ", url_photos='" + url_photos + '\'' +
+                ", HeadidHead=" + HeadidHead +
+                ", CenteridUnity=" + CenteridUnity +
+                ", id_beacon=" + id_beacon +
+                '}';
+    }
 }

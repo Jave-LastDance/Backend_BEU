@@ -65,10 +65,20 @@ public class event {
 
     private List<commentevent> reviews;
 
+    private  List<activity> activities;
+
+    public List<activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<activity> activities) {
+        this.activities = activities;
+    }
+
     public event() {
     }
 
-    public event(Integer id, String name, String description, String tags, String public_type, String requirements, Integer duration, String location, Integer capacity, String mode, String state, String category, String topic, Integer cycle, Integer prom_rating, Date date_start, Date date_end, Time time_start, Time time_end, Date date_start_post, Float price, String url_event, String url_poster, String url_photos, String head_email, String name_center, List<ratingevent> rating, List<commentevent> reviews) {
+    public event(Integer id, String name, String description, String tags, String public_type, String requirements, Integer duration, String location, Integer capacity, String mode, String state, String category, String topic, Integer cycle, Integer prom_rating, Date date_start, Date date_end, Time time_start, Time time_end, Date date_start_post, Float price, String url_event, String url_poster, String url_photos, String head_email, String name_center, List<ratingevent> rating, List<commentevent> reviews, List<activity> activities) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -95,10 +105,10 @@ public class event {
         this.url_photos = url_photos;
         this.head_email = head_email;
         this.name_center = name_center;
-        this.rating = new ArrayList<>();;
-        this.reviews =new ArrayList<>();
+        this.rating = rating;
+        this.reviews = reviews;
+        this.activities = activities;
     }
-
 
     public void setId(Integer id) {
         this.id = id;
