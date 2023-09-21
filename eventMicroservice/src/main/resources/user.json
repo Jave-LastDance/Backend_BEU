@@ -5,6 +5,9 @@
         "surname": "Bonivento",
         "rol": "estudiante",
         "program": "ingenieria",
+        "password":"123",
+        "birthday": "",
+        "semester": "",
         "email": "chaira@javeriana.edu.co"
     },
     {
@@ -13,6 +16,9 @@
         "surname": "Vasquez",
         "rol": "estudiante",
         "program": "derecho",
+        "password":"123",
+        "birthday": "",
+        "semester": "",
         "email": "luisv@javeriana.edu.co "
     },
     {
@@ -21,6 +27,9 @@
         "surname": "Arias",
         "rol": "administrativo",
         "program": "",
+        "password":"123",
+        "birthday": "",
+        "semester": "",
         "email": "emilia@javeriana.edu.co"
     },
     {
@@ -29,14 +38,42 @@
         "surname": "Garces",
         "rol": "profesor ",
         "program": "",
+        "password":"123",
+        "birthday": "",
+        "semester": "",
         "email": "jeronimo@javeriana.edu.co"
-    }, 
+    },
     {
         "id": "5",
         "name": "Ana",
         "surname": "Galvez",
         "rol": "profesor ",
         "program": "",
+        "password":"123",
+        "birthday": "",
+        "semester": "",
+        "email": "anagal@javeriana.edu.co"
+    },
+    {
+        "id": "15",
+        "name": "Roberta",
+        "surname": "Mantilla",
+        "rol": "profesor ",
+        "program": "",
+        "password":"123",
+        "birthday": "",
+        "semester": "",
+        "email": "roberta@javeriana.edu.co"
+    },
+    {
+        "id": "16",
+        "name": "Celestina",
+        "surname": "Paex",
+        "rol": "estudiante",
+        "program": "administracion",
+        "password":"123",
+        "birthday": "",
+        "semester": "",
         "email": "anagal@javeriana.edu.co"
     }
 ]

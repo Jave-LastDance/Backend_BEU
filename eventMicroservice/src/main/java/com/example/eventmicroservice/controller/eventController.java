@@ -33,7 +33,9 @@ public class eventController {
     //Mock user from account microservice
     private List<user> userSystem=createUsers();
 
+    //Mock beacon from supplier microservice
 
+    private List<beacon> beaconSystem=createBeacon();
 
 
     /**
@@ -205,6 +207,7 @@ public class eventController {
                 eventFront.getDate_start(),eventFront.getDate_end(),eventFront.getTime_start(),eventFront.getTime_end(),
                 eventFront.getDate_start_post(),eventFront.getPrice(),eventFront.getUrl_event(),eventFront.getUrl_poster(),
                 eventFront.getUrl_photos(),headId,centerId);
+        eventAux.setId_beacon(getIdBeacon(beaconSystem,Integer.parseInt(eventFront.getLocation())));
         return  eventAux;
     }
 
@@ -508,6 +511,28 @@ public class eventController {
 
     }
 
+    private Integer getIdBeacon(List<beacon> beacons, Integer idLocation){
+        List<Integer> neighbours=new ArrayList<>();
+        Integer idBeacon=-1;
+        for (beacon aux:beacons){
+            neighbours=getAllNeighbours(aux.getNeighbours());
+            if(neighbours.contains(idLocation)){
+                idBeacon=aux.getBuilding();
+            }
+        }
+        return idBeacon;
+    }
+
+    private List<Integer> getAllNeighbours(String neighbours){
+        String[] auxNeigh = neighbours.split(",");
+        List<Integer> allNeighbours= new ArrayList<>();
+        for (String aux:auxNeigh){
+            Integer num=Integer.parseInt(aux);
+            allNeighbours.add(num);
+        }
+        return allNeighbours;
+    }
+
 
 
     private List<user> createUsers(){
@@ -536,6 +561,27 @@ public class eventController {
         return userSystem;
     }
 
+    private List<beacon> createBeacon(){
+        List<beacon> beaconSystem=new ArrayList<>();
+        try {
+            FileReader fileReader = new FileReader("C://Users//marir//Desktop//Ingenieria//DECIMO//ProyectoFinal//REPOSITORIO//backend//Backend_BEU//eventMicroservice//src//main//resources//beacon.json");
+            JSONTokener jsonTokener = new JSONTokener(fileReader);
+            JSONArray jsonArray = new JSONArray(jsonTokener);
 
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                beacon beaconAux= new beacon();
+                beaconAux.setId_beacon(jsonObject.getInt("id_beacon"));
+                beaconAux.setBuilding(Integer.parseInt(jsonObject.getString("location")));
+                beaconAux.setNeighbours(jsonObject.getString("neighbours"));
+                beaconSystem.add(beaconAux);
+            }
+
+            fileReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return beaconSystem;
+    }
 
 }

@@ -7,8 +7,12 @@ public class user {
     private String surname;
     private String rol;
     private String program;
-
     private String email;
+
+
+
+
+
 
     public user() {
     }
