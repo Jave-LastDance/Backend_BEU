@@ -96,11 +96,12 @@ public class eventController {
      * This method handles a GET request to retrieve events with a specific status associated with a particular center. It returns a response entity
      * containing the list of matching events.
      * @param status
-     * @param idCenter
+     * @param nameCenter
      * @return
      */
-    @GetMapping("/evento/estado/centro/{status}/{idCenter}")
-    public ResponseEntity<List<event>> getEventPerKeyPerCenterStatus(@PathVariable String status, @PathVariable Integer idCenter){
+    @GetMapping("/evento/estado/centro/{status}/{nameCenter}")
+    public ResponseEntity<List<event>> getEventPerKeyPerCenterStatus(@PathVariable String status, @PathVariable String nameCenter){
+        Integer idCenter= findCenterId(getCenterId(),nameCenter);
         List<eventDB> auxEventDB =eventService.getAllEVentsPerStatusAndCenter(idCenter,status);
         return  new ResponseEntity<>(changeAll(auxEventDB),HttpStatus.OK);
     }
@@ -154,7 +155,7 @@ public class eventController {
      * This method handles a PUT request to change the status of an eventDB based on its idEvent. It calls the
      * changeState method from eventService and returns a response entity indicating the status change.
      * @param idEvent
-     * @return
+     * @returnfindCenterId
      */
     @PutMapping("/evento/estado/{idEvent}")
     public ResponseEntity<String> changeStatusEvent(@PathVariable Integer idEvent){
