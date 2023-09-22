@@ -22,9 +22,15 @@ public class activityController {
             return new ResponseEntity<>(auxList,HttpStatus.OK);
     }
 
-    @PutMapping("/actividad")
-    public ResponseEntity<String> updateActivity(@RequestBody activity updateActivity){
-        boolean successOperation=activityService.updateActivity(updateActivity);
+    @PutMapping("/actividades")
+    public ResponseEntity<String> updateActivity(@RequestBody List<activity> updateActivity){
+        boolean successOperation=true;
+        for(activity aux:updateActivity){
+            successOperation=activityService.updateActivity(aux);
+            if(!successOperation){
+                break;
+            }
+        }
         if(successOperation){
             return  new ResponseEntity<>("Se modificó con éxito", HttpStatus.OK);
         }else{

@@ -91,6 +91,24 @@ public class eventController {
         return  new ResponseEntity<>(changeAll(auxEventDB),HttpStatus.OK);
     }
 
+    /**
+     *The method retrieves a list of eventDB objects associated with the specified id_beacon using
+     * a service, and if this list is empty, it returns a response with a status code of 400
+     * (BAD_REQUEST) and a null body, signifying the absence of events. Conversely, if events are
+     * found, it transforms them into a list of event objects and responds with a status code of
+     * 200 (OK), indicating successful retrieval.
+     * @param id_beacon
+     * @return
+     */
+    @GetMapping("/beacon/{id_beacon}")
+    public ResponseEntity<List<event>> getEventPerKeyWord(@PathVariable Integer id_beacon){
+        List<eventDB> auxEventDB =eventService.getAllFromBeacon(id_beacon);
+        if(auxEventDB.isEmpty()){
+            return  new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        return  new ResponseEntity<>(changeAll(auxEventDB),HttpStatus.OK);
+    }
+
 
     /**
      * This method handles a GET request to retrieve events with a specific status associated with a particular center. It returns a response entity
@@ -209,6 +227,8 @@ public class eventController {
                 eventFront.getDate_start_post(),eventFront.getPrice(),eventFront.getUrl_event(),eventFront.getUrl_poster(),
                 eventFront.getUrl_photos(),headId,centerId);
         eventAux.setId_beacon(getIdBeacon(beaconSystem,Integer.parseInt(eventFront.getLocation())));
+
+
         return  eventAux;
     }
 
@@ -533,8 +553,6 @@ public class eventController {
         }
         return allNeighbours;
     }
-
-
 
     private List<user> createUsers(){
         List<user> userSystem=new ArrayList<>();

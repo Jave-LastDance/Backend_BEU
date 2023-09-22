@@ -84,6 +84,19 @@ public class eventService {
     }
 
     /**
+     * This method  takes an id_beacon as an input parameter and is designed to retrieve
+     * a list of eventDB objects associated with that specific id_beacon. It does so by making a
+     * call to the eventRepository and invokes the findEventBeacon method, passing in the id_beacon
+     * as an argument
+     * @param id_beacon
+     * @return
+     */
+    public List<eventDB> getAllFromBeacon(Integer id_beacon){
+        return eventRepository.findEventBeacon(id_beacon);
+    }
+
+
+    /**
      * This method retrieves all events with a specific status associated with a particular
      * center. It queries the repository for events matching both the center ID and status.
      * @param idCenter
