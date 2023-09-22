@@ -26,6 +26,11 @@
 			<groupId>org.springframework.ldap</groupId>
 			<artifactId>spring-ldap-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.unboundid</groupId>
+			<artifactId>unboundid-ldapsdk</artifactId>
+			<version>4.0.9</version>
+		</dependency>
 
 		<!-- Dependencia para la configuración de propiedades externas -->
 		<dependency>

@@ -1,18 +1,22 @@
 package com.authentication.authldap;
 
-
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
-import org.springframework.ldap.core.ContextMapper;
+import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.LDAPSearchException;
+import com.unboundid.ldap.sdk.SearchRequest;
+import com.unboundid.ldap.sdk.SearchResult;
+import com.unboundid.ldap.sdk.SearchResultEntry;
+import com.unboundid.ldap.sdk.SearchScope;
+import com.unboundid.util.ssl.SSLUtil;
+import com.unboundid.util.ssl.TrustAllTrustManager;
 
-
-import java.util.List;
-
+import javax.net.ssl.SSLSocketFactory;
+import java.util.ResourceBundle;
 
 @Configuration
 public class SecurityConfig {
@@ -29,51 +33,76 @@ public class SecurityConfig {
     @Bean
     public LdapTemplate ldapTemplate() {
         try {
+            // Configure the LDAP context source
             LdapContextSource contextSource = new LdapContextSource();
             contextSource.setUrl(ldapUrl);
             contextSource.setUserDn(ldapUsername);
             contextSource.setPassword(ldapPassword);
             contextSource.afterPropertiesSet();
 
-            System.out.println(ldapUrl);
-            System.out.println(contextSource);
-            LdapTemplate LdapTemplateR = new LdapTemplate(contextSource);
-            System.out.println(LdapTemplateR);
-            System.out.println("Servidor LDAP ejecutando...");
-            return LdapTemplateR;
+            // Create the LdapTemplate object
+            LdapTemplate ldapTemplate = new LdapTemplate(contextSource);
 
-        } catch (Exception e){
+            try {
+                Login();
+            } catch (LDAPException e) {
+                throw new RuntimeException(e);
+            }
 
-            e.printStackTrace();
-            return null;
+            // Perform an LDAP authentication test
+            boolean isAuthenticated = authenticateUser(ldapTemplate, "cn=jalejandro_diaz", "MaGister2021Diaz");
 
+            if (isAuthenticated) {
+                System.out.println("LDAP authentication successful.");
+            } else {
+                System.out.println("LDAP authentication failed.");
+            }
+
+            return ldapTemplate;
+        } catch (Exception e) {
+            // Handle the exception appropriately, this is just an example
+            throw new RuntimeException("Error configuring LDAP connection", e);
         }
-
     }
 
-    @Autowired
-    private LdapTemplate ldapTemplate;
-/*
-    @PostConstruct
-    public void pruebaConexion() {
+
+    public static LDAPConnection Login() throws LDAPException {
+        //ResourceBundle rb = ResourceBundle.getBundle("javedirpru.javeriana.edu.co");
+        String server = "javedirpru.javeriana.edu.co";
+        String user = "uid=be-u,o=javeriana.edu.co,o=edu";
+        // o=javeriana.edu.co,o=edu".replaceAll("#","cestepa");
+        String pwd = "EJNR+2g-r]7PXRX";
+        int puerto = Integer.parseInt("636");
+        boolean isSSL = false;
+        LDAPConnection con = null;
         try {
-            Object result = ldapTemplate.search("dc=javeiana", "(uid=jalejandro_diaz)", (ContextMapper<Object>) ctx -> ctx);
-            System.out.println("Conexión LDAP exitosa");
-            // Trabajar con el resultado aquí si es necesario.
+            if (isSSL) {
+                System.out.println("Se creo conexion LDAP SSL...");
+                SSLUtil sslUtil = new SSLUtil(new TrustAllTrustManager());
+                SSLSocketFactory sslSocketFactory = sslUtil.createSSLSocketFactory();
+                con = new LDAPConnection(sslSocketFactory, server, puerto, user, pwd);
+            } else {
+                System.out.println("Se creo conexion LDAP sin SSL...");
+                con = new LDAPConnection(server, puerto, user, pwd);
+            }
         } catch (Exception e) {
-            // Manejar la excepción si la conexión falla.
             e.printStackTrace();
+            System.out.println("Error de conexion a LDAP");
         }
-    }*/
+        return con;
+    }
 
 
 
 
-
-
+    private boolean authenticateUser(LdapTemplate ldapTemplate, String userDn, String password) {
+        try {
+            // Attempt to bind to the LDAP server with the user's DN and password
+            ldapTemplate.getContextSource().getContext(userDn, password);
+            return true; // Authentication was successful
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Authentication failed
+        }
+    }
 }
-
-
-
-
-
