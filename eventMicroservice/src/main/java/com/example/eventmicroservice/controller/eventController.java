@@ -31,13 +31,36 @@ public class eventController {
     RestTemplate restTemplate;
 
     //Mock user from account microservice
-    private List<user> userSystem=createUsers();
+    private List<user> userSystem=getAllUser();
 
     //Mock beacon from supplier microservice
 
-    private List<beacon> beaconSystem=createBeacon();
+    private List<beacon> beaconSystem=getAllBeacons();
 
 
+    public List<beacon>getAllBeacons(){
+       /*ResponseEntity<List<beacon>> responseEntity = restTemplate.exchange(
+                "http://localhost:8085/beaconPUJ/beacons/",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<beacon>>() {}
+        );
+        beaconSystem=responseEntity.getBody();*/
+        beaconSystem=createBeacon();
+        return beaconSystem;
+    }
+
+    public List<user>getAllUser(){
+       /*ResponseEntity<List<user>> responseEntity = restTemplate.exchange(
+                "http://localhost:8084/usersPUJ/users/",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<user>>() {}
+        );
+        userSystem=responseEntity.getBody();*/
+        userSystem=createUsers();
+        return userSystem;
+    }
     /**
      * This method handles a GET request to retrieve all events available in the system. It returns a response entity containing the list
      * of events fetched from eventService.
@@ -557,7 +580,7 @@ public class eventController {
     private List<user> createUsers(){
         List<user> userSystem=new ArrayList<>();
         try {
-            FileReader fileReader = new FileReader("C://Users//marir//Desktop//Ingenieria//DECIMO//ProyectoFinal//eventMicroservice//src//main//resources//user.json");
+            FileReader fileReader = new FileReader("src/main/resources/user.json");
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
 
@@ -583,7 +606,7 @@ public class eventController {
     private List<beacon> createBeacon(){
         List<beacon> beaconSystem=new ArrayList<>();
         try {
-            FileReader fileReader = new FileReader("C://Users//marir//Desktop//Ingenieria//DECIMO//ProyectoFinal//REPOSITORIO//backend//Backend_BEU//eventMicroservice//src//main//resources//beacon.json");
+            FileReader fileReader = new FileReader("src/main/resources/beacon.json");
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
 

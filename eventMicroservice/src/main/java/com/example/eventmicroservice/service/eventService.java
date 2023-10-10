@@ -92,7 +92,7 @@ public class eventService {
      * @return
      */
     public List<eventDB> getAllFromBeacon(Integer id_beacon){
-        return eventRepository.findEventBeacon(id_beacon);
+        return eventRepository.findEventBeacon(id_beacon, "publicado");
     }
 
 

@@ -16,8 +16,8 @@ public interface eventRepository extends JpaRepository<eventDB,Integer> {
     @Query(value = "SELECT * FROM event WHERE id_event=?1", nativeQuery = true)
     eventDB findByid_event(Integer id_event);
 
-    @Query(value = "SELECT * FROM event WHERE id_beacon =?1", nativeQuery = true)
-    List<eventDB> findEventBeacon(Integer id_beacon);
+    @Query(value = "SELECT * FROM event WHERE id_beacon =?1 AND state=?2", nativeQuery = true)
+    List<eventDB> findEventBeacon(Integer id_beacon, String state);
 
     @Query(value = "SELECT * FROM event WHERE name LIKE %?1%", nativeQuery = true)
     List<eventDB> findByNameIsLike(String name);
