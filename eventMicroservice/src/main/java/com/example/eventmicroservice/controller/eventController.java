@@ -31,14 +31,15 @@ public class eventController {
     RestTemplate restTemplate;
 
     //Mock user from account microservice
-    private List<user> userSystem=getAllUser();
+
 
     //Mock beacon from supplier microservice
 
-    private List<beacon> beaconSystem=getAllBeacons();
+
 
 
     public List<beacon>getAllBeacons(){
+        List<beacon> beaconSystem=new ArrayList<>();
        /*ResponseEntity<List<beacon>> responseEntity = restTemplate.exchange(
                 "http://localhost:8085/beaconPUJ/beacons/",
                 HttpMethod.GET,
@@ -51,6 +52,7 @@ public class eventController {
     }
 
     public List<user>getAllUser(){
+       List<user> userSystem=new ArrayList<>();
        /*ResponseEntity<List<user>> responseEntity = restTemplate.exchange(
                 "http://localhost:8084/usersPUJ/users/",
                 HttpMethod.GET,
@@ -238,7 +240,7 @@ public class eventController {
     private eventDB transformEventToEventDB(event eventFront){
         List<center> auxCenter=getCenterId();
         List<head>auxHead=getHeadId();
-        List<user> user=userSystem;
+        List<user> user=getAllUser();
         Integer centerId=findCenterId(auxCenter,eventFront.getName_center());
         Integer headId=findHeadId(eventFront.getHead_email(),user,auxHead);
 
@@ -249,7 +251,7 @@ public class eventController {
                 eventFront.getDate_start(),eventFront.getDate_end(),eventFront.getTime_start(),eventFront.getTime_end(),
                 eventFront.getDate_start_post(),eventFront.getPrice(),eventFront.getUrl_event(),eventFront.getUrl_poster(),
                 eventFront.getUrl_photos(),headId,centerId);
-        eventAux.setId_beacon(getIdBeacon(beaconSystem,Integer.parseInt(eventFront.getLocation())));
+        eventAux.setId_beacon(getIdBeacon(getAllBeacons(),Integer.parseInt(eventFront.getLocation())));
 
 
         return  eventAux;
@@ -266,7 +268,7 @@ public class eventController {
 
         List<center> auxCenter = getCenterId();
         List<head> auxHead = getHeadId();
-        List<user> users = userSystem;
+        List<user> users = getAllUser();
 
         event newEvent = new event(
                 eventDBAux.getId(),
