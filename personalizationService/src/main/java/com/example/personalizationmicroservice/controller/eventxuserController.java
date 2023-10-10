@@ -273,7 +273,7 @@ public class eventxuserController {
     private List<user> createUsers(){
         List<user> userSystem=new ArrayList<>();
         try {
-            FileReader fileReader = new FileReader("C:/Users/marir/Desktop/Ingenieria/DECIMO/ProyectoFinal/personalizationMicroservice//src//main//resources//user.json");
+            FileReader fileReader = new FileReader("src/main/resources/user.json");
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
 
@@ -299,7 +299,7 @@ public class eventxuserController {
     private List<beacon> createBeacon(){
         List<beacon> beaconSystem=new ArrayList<>();
         try {
-            FileReader fileReader = new FileReader("C:/Users/marir/Desktop/Ingenieria/DECIMO/ProyectoFinal/personalizationMicroservice//src//main//resources//beacons.json");
+            FileReader fileReader = new FileReader("src/main/resources/beacons.json");
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
 
@@ -322,7 +322,7 @@ public class eventxuserController {
     private List<schedule> createSchedule(){
         List<schedule> scheduleSystem=new ArrayList<>();
         try {
-            FileReader fileReader = new FileReader("C:/Users/marir/Desktop/Ingenieria/DECIMO/ProyectoFinal/personalizationMicroservice//src//main//resources//schedule.json");
+            FileReader fileReader = new FileReader("src/main/resources/schedule.json");
             JSONTokener jsonTokener = new JSONTokener(fileReader);
             JSONArray jsonArray = new JSONArray(jsonTokener);
 
