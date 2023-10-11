@@ -50,13 +50,13 @@ public class SecurityConfig {
             }
 
             // Perform an LDAP authentication test
-            boolean isAuthenticated = authenticateUser(ldapTemplate, "cn=jalejandro_diaz", "MaGister2021Diaz");
+          /*  boolean isAuthenticated = authenticateUser(ldapTemplate, "cn=jalejandro_diaz", "MaGister2021Diaz");
 
             if (isAuthenticated) {
                 System.out.println("LDAP authentication successful.");
             } else {
                 System.out.println("LDAP authentication failed.");
-            }
+            }*/
 
             return ldapTemplate;
         } catch (Exception e) {
@@ -69,11 +69,12 @@ public class SecurityConfig {
     public static LDAPConnection Login() throws LDAPException {
         //ResourceBundle rb = ResourceBundle.getBundle("javedirpru.javeriana.edu.co");
         String server = "javedirpru.javeriana.edu.co";
-        String user = "uid=be-u,o=javeriana.edu.co,o=edu";
+        //String user = "uid=be-u,o=javeriana.edu.co,o=edu";
+        String user = "uid=be-u, ou=javeriana.edu.co";
         // o=javeriana.edu.co,o=edu".replaceAll("#","cestepa");
         String pwd = "EJNR+2g-r]7PXRX";
         int puerto = Integer.parseInt("636");
-        boolean isSSL = false;
+        boolean isSSL = true;
         LDAPConnection con = null;
         try {
             if (isSSL) {
