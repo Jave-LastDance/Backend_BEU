@@ -27,10 +27,6 @@ import java.util.List;
 @RequestMapping("/personalizationPUJ")
 public class eventxuserController {
 
-    //MOCK
-    List<user> userSystem=createUsers();
-    List<beacon>beaconSystem=createBeacon();
-    List<schedule>scheduleSystem=createSchedule();
 
     @Autowired
     RestTemplate restTemplate;
@@ -88,11 +84,10 @@ public class eventxuserController {
             if(aux.getImportance()==4){
                 if(aux.getPriorityrule().equals("Preferencias")){
                     recommendationUser=getAllByPreferences(auxEvent,id_user);
-                    System.out.println("entro a preferencias porque es el 4 y el tam es "+ recommendationUser.size());
                 }else if(aux.getPriorityrule().equals("Programa")){
                     recommendationUser=getAllByProgram(auxEvent,userAux.getProgram(), userAux.getRol());
                 } else if (aux.getPriorityrule().equals("Horario")) {
-                    recommendationUser=getAllBySchedule(auxEvent,getUserSchedule(scheduleSystem,id_user));
+                    recommendationUser=getAllBySchedule(auxEvent,getUserSchedule(getAllSchedule(),id_user));
                 }else{
                     recommendationUser=auxEvent;
                 }
@@ -101,9 +96,8 @@ public class eventxuserController {
                     recommendationUser=addOnce(recommendationUser,getAllByPreferences(auxEvent,id_user));
                 }else if(aux.getPriorityrule().equals("Programa")){
                     recommendationUser=addOnce(recommendationUser,getAllByProgram(auxEvent,userAux.getProgram(), userAux.getRol()));
-                    System.out.println("entro a programa porque es el 3 : " + + recommendationUser.size());
                 } else if (aux.getPriorityrule().equals("Horario")) {
-                    recommendationUser=addOnce(recommendationUser,getAllBySchedule(auxEvent,getUserSchedule(scheduleSystem,id_user)));
+                    recommendationUser=addOnce(recommendationUser,getAllBySchedule(auxEvent,getUserSchedule(getAllSchedule(),id_user)));
                 }else{
                     recommendationUser=addOnce(recommendationUser,auxEvent);
                 }
@@ -113,8 +107,7 @@ public class eventxuserController {
                 }else if(aux.getPriorityrule().equals("Programa")){
                     recommendationUser=addOnce(recommendationUser,getAllByProgram(auxEvent,userAux.getProgram(), userAux.getRol()));
                 } else if (aux.getPriorityrule().equals("Horario")) {
-                    System.out.println("entro a horario porque es el 2: "+ + recommendationUser.size());
-                    recommendationUser=addOnce(recommendationUser,getAllBySchedule(auxEvent,getUserSchedule(scheduleSystem,id_user)));
+                    recommendationUser=addOnce(recommendationUser,getAllBySchedule(auxEvent,getUserSchedule(getAllSchedule(),id_user)));
                 }else{
                     recommendationUser=addOnce(recommendationUser,auxEvent);
                 }
@@ -124,9 +117,8 @@ public class eventxuserController {
                 }else if(aux.getPriorityrule().equals("Programa")){
                     recommendationUser=addOnce(recommendationUser,getAllByProgram(auxEvent,userAux.getProgram(), userAux.getRol()));
                 } else if (aux.getPriorityrule().equals("Horario")) {
-                    recommendationUser=addOnce(recommendationUser,getAllBySchedule(auxEvent,getUserSchedule(scheduleSystem,id_user)));
+                    recommendationUser=addOnce(recommendationUser,getAllBySchedule(auxEvent,getUserSchedule(getAllSchedule(),id_user)));
                 }else{
-                    System.out.println("entro a ubicacoin porque es el 1 "+  recommendationUser.size());
                     recommendationUser=addOnce(recommendationUser,auxEvent);
 
                 }
@@ -229,7 +221,7 @@ public class eventxuserController {
     }
 
     private user findUserData(Integer id){
-        for(user auxU:userSystem ){
+        for(user auxU:getAllUser() ){
             if(auxU.getId()==id){
                 return auxU;
             }
@@ -296,29 +288,6 @@ public class eventxuserController {
         return userSystem;
     }
 
-    private List<beacon> createBeacon(){
-        List<beacon> beaconSystem=new ArrayList<>();
-        try {
-            FileReader fileReader = new FileReader("src/main/resources/beacons.json");
-            JSONTokener jsonTokener = new JSONTokener(fileReader);
-            JSONArray jsonArray = new JSONArray(jsonTokener);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                beacon beaconAux= new beacon();
-                beaconAux.setId_beacon(jsonObject.getInt("id_beacon"));
-                beaconAux.setBuilding(Integer.parseInt(jsonObject.getString("location")));
-                beaconAux.setNeighbours(jsonObject.getString("neighbours"));
-                beaconSystem.add(beaconAux);
-            }
-
-            fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return beaconSystem;
-    }
-
     private List<schedule> createSchedule(){
         List<schedule> scheduleSystem=new ArrayList<>();
         try {
@@ -358,5 +327,30 @@ public class eventxuserController {
         return list1;
     }
 
+    private List<user> getAllUser(){
+        List<user> userSystem=new ArrayList<>();
+        /**ResponseEntity<List<user>> responseEntity = restTemplate.exchange(
+                "http://localhost:8081/eventosPUJ/beacon/",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<user>>() {}
+        );
+         userSystem= responseEntity.getBody();*/
 
+        userSystem=createUsers();
+        return userSystem;
+    }
+
+    private List<schedule> getAllSchedule(){
+        List<schedule>scheduleSystem=new ArrayList<>();
+        /**ResponseEntity<List<schedule>> responseEntity = restTemplate.exchange(
+         "http://localhost:8081/eventosPUJ/beacon/",
+         HttpMethod.GET,
+         null,
+         new ParameterizedTypeReference<List<schedule>>() {}
+         );
+         scheduleSystem= responseEntity.getBody();*/
+        scheduleSystem=createSchedule();
+        return scheduleSystem;
+    }
 }
