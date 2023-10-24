@@ -14,6 +14,9 @@ import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
 import com.unboundid.util.ssl.SSLUtil;
 import com.unboundid.util.ssl.TrustAllTrustManager;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.naming.Context;
 import javax.naming.directory.InitialDirContext;
@@ -21,6 +24,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.util.*;
 
 @Configuration
+@RestController
 public class SecurityConfig {
 
     @Value("${spring.ldap.urls}")
@@ -32,8 +36,8 @@ public class SecurityConfig {
     @Value("${spring.ldap.password}")
     private String ldapPassword;
 
-    @Bean
-    public LdapTemplate ldapTemplate() {
+    @GetMapping("/authenticate")
+    public LdapTemplate ldapTemplate(@RequestParam String Usuario, @RequestParam String pass) {
         try {
 
             // Configure the LDAP context source
@@ -46,14 +50,13 @@ public class SecurityConfig {
             // Create the LdapTemplate object
             LdapTemplate ldapTemplate = new LdapTemplate(contextSource);
 
-            try {
-                LDAPConnection con;
-                con = Login();
-
-                System.out.println("Conexion: " + con);
+            /*try {
+                ResponseServiceBus persona = consultarCuenta(Usuario,pass);
+                ResponseServiceBus persona = consultarCuenta("Jalejandro_diaz","Jalejandrodiaz12");
+                System.out.println(persona);
             } catch (LDAPException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
             return ldapTemplate;
         } catch (Exception e) {
             // Handle the exception appropriately, this is just an example
@@ -88,7 +91,7 @@ public class SecurityConfig {
         return con;
     }
 
-    public ResponseServiceBus consultarCuenta(String cuenta, String pass) {
+/*    public ResponseServiceBus consultarCuenta(String cuenta, String pass) {
 
         ResourceBundle properties = ResourceBundle.getBundle("puj.edu.co.ss.util.config");
         ResponseServiceBus persona = new ResponseServiceBus();
@@ -187,7 +190,7 @@ public class SecurityConfig {
 
         return persona;
 
-    }
+    }*/
 
 
 }
