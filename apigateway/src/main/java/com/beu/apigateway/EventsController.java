@@ -23,7 +23,7 @@ public class EventsController {
     public String getallevents() {
         return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/eventos", String.class);
     }
-
+/*
     //http://localhost:8081/eventosPUJ/evento/{{idEvent}}
     @GetMapping("/gateBeacons/eventosPUJ/evento")
     public String getEventById(@RequestParam int idEvent ) {
@@ -88,5 +88,5 @@ public class EventsController {
     @PostMapping("/gateBeacons/eventosPUJ/evento/estado/centro")
     public String getEventByDateStart6(@RequestParam String dateStart) {
         return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/fecha?dateStart={dateStart)", String.class,dateStart);
-    }
+    }*/
 }

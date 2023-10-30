@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 public class BeaconsContoller {
 
-    @Autowired
+  /*  @Autowired
     RestTemplate restTemplate;
 
     @Bean
@@ -26,5 +26,5 @@ public class BeaconsContoller {
         String response = restTemplate.getForObject("http://sumador/suma?a={a)&b=íb)", String.class, a, b);
         return response;
     }
-
+*/
 }

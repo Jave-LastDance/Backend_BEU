@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class PersonalizationController {
-    @Autowired
+   /* @Autowired
     RestTemplate restTemplate;
 
     @Bean
@@ -28,5 +28,5 @@ public class PersonalizationController {
     @GetMapping("/gateBeacons/personalizationPUJ/eventos/usuario")
     public String getByPreferenceEventUser(@RequestParam int id_beacon, @RequestParam int id_user) {
         return restTemplate.getForObject("http://personalicePUJ/personalizationPUJ/eventos/usuario?id_beacon={id_beacon)&id_user={id_user})", String.class, id_beacon, id_user);
-    }
+    }*/
 }
