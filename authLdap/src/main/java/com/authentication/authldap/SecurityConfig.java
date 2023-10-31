@@ -24,7 +24,6 @@ import javax.net.ssl.SSLSocketFactory;
 import java.util.*;
 
 @Configuration
-@RestController
 public class SecurityConfig {
 
     @Value("${spring.ldap.urls}")
@@ -35,34 +34,6 @@ public class SecurityConfig {
 
     @Value("${spring.ldap.password}")
     private String ldapPassword;
-
-    @GetMapping("/authenticate")
-    public LdapTemplate ldapTemplate(@RequestParam String Usuario, @RequestParam String pass) {
-        try {
-
-            // Configure the LDAP context source
-            LdapContextSource contextSource = new LdapContextSource();
-            contextSource.setUrl(ldapUrl);
-            contextSource.setUserDn(ldapUsername);
-            contextSource.setPassword(ldapPassword);
-            contextSource.afterPropertiesSet();
-
-            // Create the LdapTemplate object
-            LdapTemplate ldapTemplate = new LdapTemplate(contextSource);
-
-            /*try {
-                ResponseServiceBus persona = consultarCuenta(Usuario,pass);
-                ResponseServiceBus persona = consultarCuenta("Jalejandro_diaz","Jalejandrodiaz12");
-                System.out.println(persona);
-            } catch (LDAPException e) {
-                throw new RuntimeException(e);
-            }*/
-            return ldapTemplate;
-        } catch (Exception e) {
-            // Handle the exception appropriately, this is just an example
-            throw new RuntimeException("Error configuring LDAP connection", e);
-        }
-    }
 
 
     public static LDAPConnection Login() throws LDAPException {
@@ -91,106 +62,107 @@ public class SecurityConfig {
         return con;
     }
 
-/*    public ResponseServiceBus consultarCuenta(String cuenta, String pass) {
 
-        ResourceBundle properties = ResourceBundle.getBundle("puj.edu.co.ss.util.config");
-        ResponseServiceBus persona = new ResponseServiceBus();
-        ResponseService userInfo = new ResponseService();
+    public ResponseServiceBus consultarCuenta(String cuenta, String pass) {
 
-        try {
-            {
-                Properties authEnv = new Properties();
-                authEnv.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-                authEnv.put(Context.PROVIDER_URL, properties.getString("ldap_serverUser"));
-                authEnv.put(Context.SECURITY_PRINCIPAL,
-                        properties.getString("ldap_usuario").replace(":usuario", cuenta));
-                authEnv.put(Context.SECURITY_CREDENTIALS, pass);
-                new InitialDirContext(authEnv);
-            }
-
-            LDAPConnection con = this.Login();
-            String attributesArrayG[] = {"cn", "uniqueMember"};
-            Map<String, String[]> grupos = new HashMap<String, String[]>();// gruposStr.split(";");
-            SearchRequest searchRequestG = new SearchRequest(properties.getString("ldap_baseGroups"), SearchScope.SUB,
-                    properties.getString("ldap_groupsFilter"));
-            searchRequestG.setAttributes(Arrays.asList(attributesArrayG));
-            SearchResult searchResultG = con.search(searchRequestG);
-
-            for (SearchResultEntry entry : searchResultG.getSearchEntries()) {
-                String gcn = entry.getAttributeValue("cn");
-                String[] uniqueMembers = entry.getAttributeValues("uniqueMember");
-                grupos.put(gcn, uniqueMembers);
-
-            }
-
-            String attributesArray[] = {"uid", "givenName", "businessCategory", "emplid", "pwdChangedTime",
-                    "apellido1", "apellido2", "programa", "dependencia", "employeeNumber"};
-
-            List<String> attributes = Arrays.asList(attributesArray);
-
-            String filter = "(uid=" + cuenta + ")";
-
-            SearchRequest searchRequest = new SearchRequest(properties.getString("ldap_baseUsers"), SearchScope.SUB, filter);
-            searchRequest.setAttributes(attributes);
-            SearchResult searchResult;
-
+            ResourceBundle properties = ResourceBundle.getBundle("application");
+            ResponseServiceBus persona = new ResponseServiceBus();
+            ResponseService userInfo = new ResponseService();
 
             try {
-                searchResult = con.search(searchRequest);
-                if (searchResult.getEntryCount() != 1) {
-                    persona.setValidacion(false);
-                    throw new Exception(
-                            "La consulta " + filter + " devolvio " + searchResult.getEntryCount() + " registros");
+
+                LDAPConnection con = this.Login();
+                String attributesArrayG[] = {"cn", "uniqueMember"};
+                Map<String, String[]> grupos = new HashMap<String, String[]>();// gruposStr.split(";");
+                SearchRequest searchRequestG = new SearchRequest(properties.getString("ldap_baseGroups"), SearchScope.SUB,
+                        properties.getString("ldap_groupsFilter"));
+                searchRequestG.setAttributes(Arrays.asList(attributesArrayG));
+                SearchResult searchResultG = con.search(searchRequestG);
+
+                for (SearchResultEntry entry : searchResultG.getSearchEntries()) {
+                    String gcn = entry.getAttributeValue("cn");
+                    String[] uniqueMembers = entry.getAttributeValues("uniqueMember");
+                    grupos.put(gcn, uniqueMembers);
 
                 }
 
-                persona.setValidacion(true);
+                String attributesArray[] = {"uid", "givenName", "businessCategory", "emplid", "pwdChangedTime",
+                        "apellido1", "apellido2", "programa", "dependencia", "employeeNumber"};
+
+                List<String> attributes = Arrays.asList(attributesArray);
+
+                String filter = "(uid=" + cuenta + ")";
+
+                SearchRequest searchRequest = new SearchRequest(properties.getString("ldap_baseUsers"), SearchScope.SUB, filter);
+                searchRequest.setAttributes(attributes);
+                SearchResult searchResult;
 
 
-                for (SearchResultEntry entry : searchResult.getSearchEntries()) {
-                    String givenName = entry.getAttributeValue("givenName");
-                    String emplid = entry.getAttributeValue("emplid");
-                    String pwdChangedTime = entry.getAttributeValue("pwdChangedTime");
-                    String programa = entry.getAttributeValue("programa");
-                    String dependecia = entry.getAttributeValue("dependencia");
-                    String employeeNumber = entry.getAttributeValue("employeeNumber");
-                    String apellidos = entry.getAttributeValue("apellido1") + " " + entry.getAttributeValue("apellido2");
-                    String[] roles = entry.getAttributeValues("businessCategory");
+                try {
+                    searchResult = con.search(searchRequest);
+                    if (searchResult.getEntryCount() != 1) {
+                        persona.setValidacion(false);
+                        throw new Exception(
+                                "La consulta " + filter + " devolvio " + searchResult.getEntryCount() + " registros");
 
-                    if (givenName == null) {
-                        givenName = "";
                     }
-                    int pwdLifetime = 1000;
-                    Collection<String> tempRol = new ArrayList<String>();
-                    for (String tempS : roles)
-                        tempRol.add(tempS);
-                    userInfo.setOprId(cuenta);
-                    userInfo.setNombre(givenName);
-                    userInfo.setApellidos(apellidos);
-                    userInfo.setDependencia(dependecia);
-                    userInfo.setEmplId(emplid);
-                    userInfo.setDiasVencimiento(String.valueOf(pwdLifetime));
-                    userInfo.setPrograma(programa);
-                    userInfo.setDocumento(employeeNumber);
-                    userInfo.setRoles(tempRol);
-                    persona.setPersona(userInfo);
 
+                    persona.setValidacion(true);
+
+
+                    for (SearchResultEntry entry : searchResult.getSearchEntries()) {
+                        String givenName = entry.getAttributeValue("givenName");
+                        String emplid = entry.getAttributeValue("emplid");
+                        String pwdChangedTime = entry.getAttributeValue("pwdChangedTime");
+                        String programa = entry.getAttributeValue("programa");
+                        String dependecia = entry.getAttributeValue("dependencia");
+                        String employeeNumber = entry.getAttributeValue("employeeNumber");
+                        String apellidos = entry.getAttributeValue("apellido1") + " " + entry.getAttributeValue("apellido2");
+                        String[] roles = entry.getAttributeValues("businessCategory");
+
+                        if (givenName == null) {
+                            givenName = "";
+                        }
+                        int pwdLifetime = 1000;
+                        Collection<String> tempRol = new ArrayList<String>();
+                        for (String tempS : roles)
+                            tempRol.add(tempS);
+                        userInfo.setOprId(cuenta);
+                        userInfo.setNombre(givenName);
+                        userInfo.setApellidos(apellidos);
+                        userInfo.setDependencia(dependecia);
+                        userInfo.setEmplId(emplid);
+                        userInfo.setDiasVencimiento(String.valueOf(pwdLifetime));
+                        userInfo.setPrograma(programa);
+                        userInfo.setDocumento(employeeNumber);
+                        userInfo.setRoles(tempRol);
+                        persona.setPersona(userInfo);
+
+                    }
+
+                } catch (LDAPSearchException lse) {
+                    this.logout(con);
+                    lse.printStackTrace();
+                } finally {
+                    this.logout(con);
                 }
 
-            } catch (LDAPSearchException lse) {
-                this.logout(con);
-                lse.printStackTrace();
-            } finally {
-                this.logout(con);
+            } catch (Exception e) {
+                System.out.println("Ocurrio un error al consultar el usuario: " + cuenta + ". Error: " + e.getMessage());
             }
 
-        } catch (Exception e) {
-            System.out.println("Ocurrio un error al consultar el usuario: " + cuenta + ". Error: " + e.getMessage());
+            return persona;
+
         }
 
-        return persona;
 
-    }*/
+    public Boolean logout(LDAPConnection con) {
+        if (con != null) {
+            System.out.println("Se cerro la conexión de LDAP");
+            con.close();
+        }
+        return true;
+    }
 
 
 }
