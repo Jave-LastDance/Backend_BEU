@@ -72,6 +72,22 @@ public class eventController {
     public ResponseEntity<List<event>> getAllEvents(){
         return new ResponseEntity<>(changeAll(eventService.getAllEvents()), HttpStatus.OK);
     }
+    /**
+     * This method handles a GET request to retrieve all events available in the system. It returns a response entity
+     * containing the list of events that have the state Activo fetched from eventService.
+     * @return
+     */
+    @GetMapping("/eventos/activos")
+    public ResponseEntity<List<event>> getAllActiveEvents(){
+        List<event> activeEv=new ArrayList<>();
+        for(event aux:changeAll(eventService.getAllEvents())){
+            if(aux.getState().equals("Activo")){
+                activeEv.add(aux);
+            }
+        }
+        return new ResponseEntity<>(activeEv, HttpStatus.OK);
+    }
+
 
     /**
      * This method handles a GET request to retrieve a specific eventDB based on its idEvent. It returns a response entity containing
@@ -200,9 +216,9 @@ public class eventController {
      * @param idEvent
      * @returnfindCenterId
      */
-    @PutMapping("/evento/estado/{idEvent}")
-    public ResponseEntity<String> changeStatusEvent(@PathVariable Integer idEvent){
-        eventService.changeState(idEvent);
+    @PutMapping("/evento/estado/{idEvent}/{status}")
+    public ResponseEntity<String> changeStatusEvent(@PathVariable Integer idEvent,  @PathVariable String status){
+        eventService.changeState(idEvent,status);
         return  new ResponseEntity<>("Estado cambiado correctamente",HttpStatus.OK);
     }
 

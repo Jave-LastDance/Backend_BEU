@@ -92,7 +92,7 @@ public class eventService {
      * @return
      */
     public List<eventDB> getAllFromBeacon(Integer id_beacon){
-        return eventRepository.findEventBeacon(id_beacon, "publicado");
+        return eventRepository.findEventBeacon(id_beacon, "Activo");
     }
 
 
@@ -130,15 +130,10 @@ public class eventService {
      * If the eventDB is currently enabled, it's disabled, and vice versa.
      * @param idEvent
      */
-    public void changeState(Integer idEvent){
+    public void changeState(Integer idEvent, String status){
         eventDB eventDBNew =getOneEvent(idEvent);
-        if(eventDBNew.getState().equals("publicado")){
-            eventDBNew.setState("borrador");
-            eventRepository.save(eventDBNew);
-        }else{
-            eventDBNew.setState("publicado");
-            eventRepository.save(eventDBNew);
-        }
+        eventDBNew.setState(status);
+        eventRepository.save(eventDBNew);
     }
 
     /**
