@@ -83,7 +83,7 @@ public class eventscenterService {
         eventscenter.setEvent_CGC_count(totalEvents(eventsActive, "CGC"));
         eventscenter.setEvent_count_CJFD(totalEvents(eventsActive, "CJFD"));
         eventscenter.setEvent_count_CAPS(totalEvents(eventsActive, "CAPS"));
-        eventscenter.setEvent_PSFJ_count(totalEvents(eventsActive, "PSFJ"));
+        eventscenter.setEvent_PSFJ_count(totalEvents(eventsActive, "CPSFJ"));
     }
 
     /**
