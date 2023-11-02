@@ -61,7 +61,7 @@ public class eventxuserController {
     @GetMapping("/eventos/{id_beacon}")
     private List<event> getAllEvents(@PathVariable Integer id_beacon){
         ResponseEntity<List<event>> responseEntity = restTemplate.exchange(
-                "http://localhost:8081/eventosPUJ/beacon/"+id_beacon,
+                "http://192.168.23.2:8081/eventosPUJ/beacon/"+id_beacon,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<event>>() {}
