@@ -1,8 +1,0 @@
-com\beu\apigateway\ApigatewayApplication.class
-com\beu\apigateway\PersonalizationController.class
-com\beu\apigateway\controller\RequestController.class
-com\beu\apigateway\entity\Request.class
-com\beu\apigateway\config\KafkaTopicConfig.class
-com\beu\apigateway\EventsController.class
-com\beu\apigateway\kafka\RequestProducer.class
-com\beu\apigateway\BeaconsContoller.class
