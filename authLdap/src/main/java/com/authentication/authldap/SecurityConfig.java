@@ -71,6 +71,15 @@ public class SecurityConfig {
 
             try {
 
+                {
+                    Properties authEnv = new Properties();
+                    authEnv.put(Context.PROVIDER_URL, properties.getString("ldap_serverUser"));
+                    authEnv.put(Context.SECURITY_PRINCIPAL,
+                            properties.getString("ldap_usuario").replace(":usuario", cuenta));
+                    authEnv.put(Context.SECURITY_CREDENTIALS, pass);
+                    new InitialDirContext(authEnv);
+                }
+
                 LDAPConnection con = this.Login();
                 String attributesArrayG[] = {"cn", "uniqueMember"};
                 Map<String, String[]> grupos = new HashMap<String, String[]>();// gruposStr.split(";");

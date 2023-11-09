@@ -1,35 +1,58 @@
 package com.example.eventmicroservice.entity;
 
+import jakarta.persistence.Column;
+
 public class beacon {
 
-    private Integer id_beacon;
-    private Integer location;
-    private String neighbours;
+    private String id;
+    private String neighbors;
+    private String supplier;
+
+    private String color;
+
+    private int id_building;
+
 
     public beacon() {
     }
 
-    public Integer getId_beacon() {
-        return id_beacon;
+    public String getId() {
+        return id;
     }
 
-    public void setId_beacon(Integer id_beacon) {
-        this.id_beacon = id_beacon;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Integer getBuilding() {
-        return location;
+    public String getNeighbors() {
+        return neighbors;
     }
 
-    public void setBuilding(Integer location) {
-        this.location = location;
+    public void setNeighbors(String neighbors) {
+        this.neighbors = neighbors;
     }
 
-    public String getNeighbours() {
-        return neighbours;
+    public String getSupplier() {
+        return supplier;
     }
 
-    public void setNeighbours(String neighbours) {
-        this.neighbours = neighbours;
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getId_building() {
+        return id_building;
+    }
+
+    public void setId_building(int id_building) {
+        this.id_building = id_building;
     }
 }

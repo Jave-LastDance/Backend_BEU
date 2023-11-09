@@ -20,4 +20,8 @@ public class PersonService {
         return personRepository.findByuser(user);
     }
 
+    public void actualizarToken(String username, String nuevoToken) {
+        this.personRepository.updateTokenByUsername(nuevoToken, username);
+    }
+
 }

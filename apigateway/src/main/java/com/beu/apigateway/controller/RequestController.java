@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 public class RequestController {
-
     private RequestProducer requestProducer;
 
     // Constructor to inject a RequestProducer into this class.
@@ -34,4 +33,5 @@ public class RequestController {
         // Return a successful HTTP response with a message.
         return ResponseEntity.ok("Request sent to Kafka topic...");
     }
+
 }

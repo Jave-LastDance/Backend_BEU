@@ -9,8 +9,11 @@ import java.util.List;
 
 public interface BeaconRepository extends JpaRepository<Beacon, Integer> {
 
-    @Query(value ="SELECT b.id_building,b.neighbors FROM Beacon b WHERE b.id", nativeQuery = true)
+    @Query(value ="SELECT b.id_building,b.neighbors FROM Beacon b WHERE b.id=?1", nativeQuery = true)
     String findNeighborsByBeaconId(@Param("beaconId") String beaconId);
+
+    @Query(value ="SELECT * FROM Beacon b ", nativeQuery = true)
+    List<Beacon> findAllBeacons();
 
     List<Beacon> findById(String id);
 }

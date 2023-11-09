@@ -1,6 +1,8 @@
-package com.authentication.authldap.Entity;
+package com.beu.apigateway.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "person")

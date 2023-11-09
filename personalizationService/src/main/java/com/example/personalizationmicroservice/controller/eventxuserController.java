@@ -61,7 +61,7 @@ public class eventxuserController {
     @GetMapping("/eventos/{id_beacon}")
     private List<event> getAllEvents(@PathVariable Integer id_beacon){
         ResponseEntity<List<event>> responseEntity = restTemplate.exchange(
-                "http://192.168.23.2:8081:8081/eventosPUJ/beacon/"+id_beacon,
+                "http://localhost:8081/eventosPUJ/beacon/"+id_beacon,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<event>>() {}
@@ -330,7 +330,7 @@ public class eventxuserController {
     private List<user> getAllUser(){
         List<user> userSystem=new ArrayList<>();
         /**ResponseEntity<List<user>> responseEntity = restTemplate.exchange(
-                "http://localhost:8081/eventosPUJ/beacon/",
+                "http://localhost:8081/userPUJ/users/",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<user>>() {}
@@ -343,13 +343,6 @@ public class eventxuserController {
 
     private List<schedule> getAllSchedule(){
         List<schedule>scheduleSystem=new ArrayList<>();
-        /**ResponseEntity<List<schedule>> responseEntity = restTemplate.exchange(
-         "http://localhost:8081/eventosPUJ/beacon/",
-         HttpMethod.GET,
-         null,
-         new ParameterizedTypeReference<List<schedule>>() {}
-         );
-         scheduleSystem= responseEntity.getBody();*/
         scheduleSystem=createSchedule();
         return scheduleSystem;
     }

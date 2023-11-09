@@ -32,18 +32,18 @@ public class eventController {
     RestTemplate restTemplate;
 
     @Autowired
-   activityController activityController;
+    activityController activityController;
 
+    @GetMapping("/beacons")
     public List<beacon>getAllBeacons(){
         List<beacon> beaconSystem=new ArrayList<>();
-       /*ResponseEntity<List<beacon>> responseEntity = restTemplate.exchange(
-                "http://localhost:8085/beaconPUJ/beacons/",
+      ResponseEntity<List<beacon>> responseEntity = restTemplate.exchange(
+                "http://localhost:8090/beacons/Allbeacons",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<beacon>>() {}
         );
-        beaconSystem=responseEntity.getBody();*/
-        beaconSystem=createBeacon();
+        beaconSystem=responseEntity.getBody();
         return beaconSystem;
     }
 
@@ -560,9 +560,9 @@ public class eventController {
         List<Integer> neighbours=new ArrayList<>();
         Integer idBeacon=-1;
         for (beacon aux:beacons){
-            neighbours=getAllNeighbours(aux.getNeighbours());
+            neighbours=getAllNeighbours(aux.getNeighbors());
             if(neighbours.contains(idLocation)){
-                idBeacon=aux.getBuilding();
+                idBeacon=aux.getId_building();
             }
         }
         return idBeacon;
@@ -604,27 +604,6 @@ public class eventController {
         return userSystem;
     }
 
-    private List<beacon> createBeacon(){
-        List<beacon> beaconSystem=new ArrayList<>();
-        try {
-            FileReader fileReader = new FileReader("src/main/resources/beacon.json");
-            JSONTokener jsonTokener = new JSONTokener(fileReader);
-            JSONArray jsonArray = new JSONArray(jsonTokener);
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                beacon beaconAux= new beacon();
-                beaconAux.setId_beacon(jsonObject.getInt("id_beacon"));
-                beaconAux.setBuilding(Integer.parseInt(jsonObject.getString("location")));
-                beaconAux.setNeighbours(jsonObject.getString("neighbours"));
-                beaconSystem.add(beaconAux);
-            }
-
-            fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return beaconSystem;
-    }
 
 }

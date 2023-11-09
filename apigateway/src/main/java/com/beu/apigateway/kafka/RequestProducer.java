@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RequestProducer {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestProducer.class);
 
     @Autowired

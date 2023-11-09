@@ -9,11 +9,8 @@ public class Beacon {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "neighbors", columnDefinition = "JSON")
+    @Column(name = "neighbors")
     private String neighbors;
-
-    @Column(name = "id_building")
-    private Long idBuilding;
 
     @Column(name = "supplier")
     private String supplier;
@@ -21,9 +18,8 @@ public class Beacon {
     @Column(name = "color")
     private String color;
 
-    @ManyToOne
-    @JoinColumn(name = "id_building", referencedColumnName = "id_building", insertable = false, updatable = false)
-    private Building building;
+    @Column(name = "id_building")
+    private int id_building;
 
     // Getters and setters
 
@@ -44,13 +40,6 @@ public class Beacon {
         this.neighbors = neighbors;
     }
 
-    public Long getIdBuilding() {
-        return idBuilding;
-    }
-
-    public void setIdBuilding(Long idBuilding) {
-        this.idBuilding = idBuilding;
-    }
 
     public String getSupplier() {
         return supplier;
@@ -68,11 +57,11 @@ public class Beacon {
         this.color = color;
     }
 
-    public Building getBuilding() {
-        return building;
+    public int getId_building() {
+        return id_building;
     }
 
-    public void setBuilding(Building building) {
-        this.building = building;
+    public void setId_building(int id_building) {
+        this.id_building = id_building;
     }
 }

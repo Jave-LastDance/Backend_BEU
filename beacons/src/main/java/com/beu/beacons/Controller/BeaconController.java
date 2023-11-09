@@ -27,11 +27,17 @@ public class BeaconController {
     }
 
     // Endpoint para obtener toda la información de un beacon por su id
-    @GetMapping("/")
+    @GetMapping("/beacon")
     public ResponseEntity<?>getBeaconById(@RequestParam  String beaconId) {
         List<Beacon> beaconfind =beaconService.findById(beaconId);
         return ResponseEntity.ok(beaconfind);
     }
+
+    @GetMapping("/Allbeacons")
+   public ResponseEntity<?>getAllBeacon() {
+       List<Beacon> beaconsfind =beaconService.findAllBeacons();
+       return ResponseEntity.ok(beaconsfind);
+   }
 
 
 
