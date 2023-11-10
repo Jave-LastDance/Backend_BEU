@@ -46,17 +46,16 @@ public class eventController {
         beaconSystem=responseEntity.getBody();
         return beaconSystem;
     }
-
+@GetMapping("/users")
     public List<user>getAllUser(){
        List<user> userSystem=new ArrayList<>();
-       /*ResponseEntity<List<user>> responseEntity = restTemplate.exchange(
-                "http://localhost:8084/usersPUJ/users/",
+       ResponseEntity<List<user>> responseEntity = restTemplate.exchange(
+                "http://192.168.76.29:8092/auth/allusers",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<user>>() {}
         );
-        userSystem=responseEntity.getBody();*/
-        userSystem=createUsers();
+        userSystem=responseEntity.getBody();
         return userSystem;
     }
     /**
@@ -341,7 +340,7 @@ public class eventController {
         }
         for(user aux:user){
             if(auxIdUser==aux.getId()){
-                email=aux.getEmail();
+                email=aux.getUsername();
                 break;
             }
         }
@@ -379,7 +378,7 @@ public class eventController {
     private Integer findHeadId( String email, List<user> user, List<head> auxHead){
         Integer returnId=-1;
         for(user aux:user){
-         if(aux.getEmail().equals(email)){
+         if(aux.getUsername().equals(email)){
              returnId=aux.getId();
              break;
          }
@@ -578,31 +577,7 @@ public class eventController {
         return allNeighbours;
     }
 
-    private List<user> createUsers(){
-        List<user> userSystem=new ArrayList<>();
-        try {
-            FileReader fileReader = new FileReader("src/main/resources/user.json");
-            JSONTokener jsonTokener = new JSONTokener(fileReader);
-            JSONArray jsonArray = new JSONArray(jsonTokener);
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                user user = new user();
-                user.setId(jsonObject.getInt("id"));
-                user.setName(jsonObject.getString("name"));
-                user.setSurname(jsonObject.getString("surname"));
-                user.setRol(jsonObject.getString("rol"));
-                user.setProgram(jsonObject.getString("program"));
-                user.setEmail(jsonObject.getString("email"));
-                userSystem.add(user);
-            }
-
-            fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return userSystem;
-    }
 
 
 

@@ -1,5 +1,6 @@
 package com.beu.apigateway.controller;
 
+import com.beu.apigateway.entity.Beacon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +19,14 @@ public class BeaconsContoller {
 
 
     @GetMapping("/neighbors")
-    public String calculadoraSuma(@RequestParam String beaconId) {
+    public String getneighbors(@RequestParam String beaconId) {
         String response = restTemplate.getForObject("http://beaconsservice/beacons/neighbors?beaconId={beaconId}", String.class,beaconId);
+        return response;
+    }
+
+    @GetMapping("/id")
+    public Beacon getbeaconbyid(@RequestParam String beaconId) {
+        Beacon response = restTemplate.getForObject("http://beaconsservice/beacons/id?beaconId={beaconId}", Beacon.class,beaconId);
         return response;
     }
 

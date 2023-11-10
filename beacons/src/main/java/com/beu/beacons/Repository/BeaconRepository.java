@@ -15,5 +15,5 @@ public interface BeaconRepository extends JpaRepository<Beacon, Integer> {
     @Query(value ="SELECT * FROM Beacon b ", nativeQuery = true)
     List<Beacon> findAllBeacons();
 
-    List<Beacon> findById(String id);
+    Beacon findById(String id);
 }

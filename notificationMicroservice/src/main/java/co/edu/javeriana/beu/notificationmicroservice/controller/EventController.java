@@ -18,9 +18,9 @@ public class EventController {
     RestTemplate restTemplate;
 
     @GetMapping("/getAll")
-    public List<Event> getAllEvents() {
+    public List<Event> getAllEvents(int idbeacon, int iduser) {
         ResponseEntity<List<Event>> responseEntity = restTemplate.exchange(
-                "http://localhost:8086/eventosPUJ/eventos",
+                "http://localhost:8082/personalizacionPUJ/eventos/usuario/"+idbeacon+"/"+iduser,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Event>>() {

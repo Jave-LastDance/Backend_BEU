@@ -24,7 +24,7 @@ public class BeaconService {
     // Método para obtener toda la información de un beacon por su id
 
 
-    public List<Beacon> findById(String id) {
+    public Beacon findById(String id) {
         return beaconRepository.findById(id);
     }
 

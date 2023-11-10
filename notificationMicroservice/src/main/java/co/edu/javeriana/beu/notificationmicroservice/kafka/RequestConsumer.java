@@ -59,13 +59,13 @@ public class RequestConsumer {
         Date currentTime = new Date();
 
         if (isTimeToNotify(mostRecentNotificationTime, currentTime)) {
-            List<Event> events = eventController.getAllEvents();
+            List<Event> events = eventController.getAllEvents(beaconId,userId);
 
             for (Event event : events) {
                 if (isEventNotified(userId, event.getId())) {
                     continue;
                 }
-
+                System.out.println(event.getName());
                 NotificationMessage notificationMessage = createNotificationMessage(tokenDevice, event);
                 Notification notificationDB = createNotificationEntity(userId, event);
 
@@ -91,7 +91,7 @@ public class RequestConsumer {
         NotificationMessage notificationMessage = new NotificationMessage();
         notificationMessage.setDeviceToken(tokenDevice);
         notificationMessage.setTitle(event.getName());
-        notificationMessage.setBody(event.getDescription());
+        notificationMessage.setBody(event.getRequirements());
         notificationMessage.setImage(event.getUrl_poster());
 
         Map<String, String> eventData = new HashMap<>();
@@ -106,7 +106,7 @@ public class RequestConsumer {
         notification.setUser_id(userId);
         notification.setEvent_id(event.getId());
         notification.setTitle(event.getName());
-        notification.setBody(event.getDescription());
+        notification.setBody(event.getRequirements());
         notification.setImage(event.getUrl_poster());
         notification.setUrl_notification(event.getUrl_event());
         return notification;

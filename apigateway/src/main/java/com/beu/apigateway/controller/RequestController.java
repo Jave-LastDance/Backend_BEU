@@ -5,13 +5,10 @@ import java.util.UUID;
 import com.beu.apigateway.entity.Request;
 import com.beu.apigateway.kafka.RequestProducer;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/notification")
 public class RequestController {
     private RequestProducer requestProducer;
 
@@ -21,9 +18,13 @@ public class RequestController {
     }
 
     // This method handles POST requests at the "/api/v1/notifications" route.
-    @PostMapping("/notifications")
-    public ResponseEntity<String> placeNotification(@RequestBody Request request) {
+    @PostMapping("/up")
+    public ResponseEntity<String> placeNotification(@RequestParam String tokenDevice,@RequestParam int beaconId,@RequestParam int userId) {
 
+        Request request = new Request();
+        request.setBeaconId(beaconId);
+        request.setTokenDevice(tokenDevice);
+        request.setUserId(userId);
         // Generate a unique ID for the notification using UUID.
         request.setRequestId(UUID.randomUUID().toString());
 
