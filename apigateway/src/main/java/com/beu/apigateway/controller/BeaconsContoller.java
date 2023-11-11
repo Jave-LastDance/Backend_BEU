@@ -26,7 +26,7 @@ public class BeaconsContoller {
 
     @GetMapping("/id")
     public Beacon getbeaconbyid(@RequestParam String beaconId) {
-        Beacon response = restTemplate.getForObject("http://beaconsservice/beacons/id?beaconId={beaconId}", Beacon.class,beaconId);
+        Beacon response = restTemplate.getForObject("http://beaconsservice/beacons/beacon?beaconId={beaconId}", Beacon.class,beaconId);
         return response;
     }
 

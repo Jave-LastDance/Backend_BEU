@@ -21,7 +21,7 @@ public class LoginControler {
     @PostMapping("/login")
     public ResponseEntity<?> postnewRating(@RequestBody LoginRequest request) {
         try {
-        String url = "http://registerService/auth/login"; // Reemplaza 'puerto' con el puerto de tu aplicación
+        String url = "http://localhost:8092/auth/login"; // Reemplaza 'puerto' con el puerto de tu aplicación
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -29,6 +29,7 @@ public class LoginControler {
 
 
         ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+            System.out.println(response.getBody());
         return ResponseEntity.ok(response.getBody());
 
 

@@ -50,7 +50,7 @@ public class eventController {
     public List<user>getAllUser(){
        List<user> userSystem=new ArrayList<>();
        ResponseEntity<List<user>> responseEntity = restTemplate.exchange(
-                "http://192.168.76.29:8092/auth/allusers",
+                "http://localhost:8092/auth/allusers",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<user>>() {}
