@@ -305,7 +305,7 @@ public class eventxuserController {
     private List<user> getAllUser(){
         List<user> userSystem=new ArrayList<>();
         ResponseEntity<List<user>> responseEntity = restTemplate.exchange(
-                "http://localhost:8092/auth/allusers",
+                "http://registerservice/auth/allusers",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<user>>() {}

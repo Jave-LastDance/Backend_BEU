@@ -12,6 +12,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
+
 @RequestMapping("/auth")
 public class LoginControler {
 
@@ -21,7 +22,7 @@ public class LoginControler {
     @PostMapping("/login")
     public ResponseEntity<?> postnewRating(@RequestBody LoginRequest request) {
         try {
-        String url = "http://localhost:8092/auth/login"; // Reemplaza 'puerto' con el puerto de tu aplicación
+        String url = "http://registerservice/auth/login"; // Reemplaza 'puerto' con el puerto de tu aplicación
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
