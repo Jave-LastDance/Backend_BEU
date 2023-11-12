@@ -4,10 +4,13 @@ import com.beu.apigateway.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/eventosPUJ")
@@ -17,53 +20,92 @@ public class EventsController {
     RestTemplate restTemplate;
 
     @GetMapping("/eventos")
-    public String getallevents() {
+    public ResponseEntity<List<event>> getAllEvents() {
         try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/eventos", String.class);
+            ResponseEntity<List<event>> responseEntity = restTemplate.exchange(
+                    "http://eventosCRUD/eventosPUJ/eventos",
+                    org.springframework.http.HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<event>>() {}
+            );
+
+            List<event> events = responseEntity.getBody();
+            return ResponseEntity.ok(events);
         } catch (Exception exception) {
-            throw new RuntimeException("Este es un error personalizado.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 
 
     @GetMapping("/evento/{idEvent}")
-    public String getEventById(@PathVariable int idEvent) {
+    public ResponseEntity<event> getEventById(@PathVariable int idEvent) {
         try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/" + idEvent, String.class);
+            event event = restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/" + idEvent, event.class);
+            return ResponseEntity.ok(event);
         } catch (Exception exception) {
-            throw new RuntimeException("Este es un error personalizado.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null); // or handle error response in another way
         }
     }
 
     //http://localhost:8081/eventosPUJ/evento/centro/{{nameCenter}}
     @GetMapping("/evento/centro/{nameCenter}")
-    public String getEventById(@PathVariable String nameCenter) {
+    public ResponseEntity<List<event>> getEventsByCenter(@PathVariable String nameCenter) {
         try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/centro/" + nameCenter, String.class);
+            ResponseEntity<List<event>> responseEntity = restTemplate.exchange(
+                    "http://eventosCRUD/eventosPUJ/evento/centro/" + nameCenter,
+                    org.springframework.http.HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<event>>() {}
+            );
+
+            List<event> events = responseEntity.getBody();
+            return ResponseEntity.ok(events);
         } catch (Exception exception) {
-            throw new RuntimeException("Este es un error personalizado.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 
     //http://localhost:8081/eventosPUJ/beacon/{{id_beacon}}
-    @GetMapping("/beacon/{id_beacon}")
-    public String getEventByBeaconId(@PathVariable Integer id_beacon) {
+    @GetMapping("/beaconlocation/{location_beacon}")
+    public ResponseEntity<List<event>> getEventsByBeaconId(@PathVariable String location_beacon) {
         try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/beacon/" + id_beacon, String.class);
-        } catch (Exception exeption) {
-            throw new RuntimeException("Este es un error personalizado.");
+            ResponseEntity<List<event>> responseEntity = restTemplate.exchange(
+                    "http://eventosCRUD/eventosPUJ/beacon/" + location_beacon,
+                    org.springframework.http.HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<event>>() {}
+            );
+
+            List<event> events = responseEntity.getBody();
+            return ResponseEntity.ok(events);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
-
-
     }
 
     //http://localhost:8081/eventosPUJ/evento/estado/centro/{{status}}/{{nameCenter}}
     @GetMapping("/evento/estado/centro/{status}/{nameCenter}")
-    public String getEventByStateCenter(@PathVariable String status, @PathVariable String nameCenter) {
+    public ResponseEntity<List<event>> getEventsByStateCenter(
+            @PathVariable String status,
+            @PathVariable String nameCenter
+    ) {
         try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/estado/centro/" + status + "/" + nameCenter, String.class);
-        } catch (Exception exepcion) {
-            throw new RuntimeException("Este es un error personalizado.");
+            ResponseEntity<List<event>> responseEntity = restTemplate.exchange(
+                    "http://eventosCRUD/eventosPUJ/evento/estado/centro/" + status + "/" + nameCenter,
+                    org.springframework.http.HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<event>>() {}
+            );
+
+            List<event> events = responseEntity.getBody();
+            return ResponseEntity.ok(events);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null); // or handle error response in another way
         }
     }
 
@@ -102,6 +144,16 @@ public class EventsController {
 
 
     //    POST http://localhost:8081/eventosPUJ/comentarioPUJ/comentario/evento
+    @PostMapping("/evento/nuevo/comment")
+    public ResponseEntity<?> postnewComment(@RequestBody commentevent comment) {
+        String url = "http://eventosCRUD/eventosPUJ/comentarioPUJ/comentario/evento";
+        try {
+            ResponseEntity<?> responseEntity = restTemplate.postForEntity(url, comment, String.class);
+            return responseEntity;
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("Ya calificaste el evento. Puedes modificar la calificacion", HttpStatus.OK);
+        }
+    }
 //
 //
 //    PUT http://localhost:8081/eventosPUJ/comentarioPUJ/comentario/evento
@@ -160,24 +212,41 @@ public class EventsController {
 
     //    GET http://localhost:8081/eventosPUJ/ratingPUJ/evento/usuario/{{idUser}}/{{idEvent}}
     @GetMapping("/evento/usuario/{idUser}/{idEvent}")
-    public ResponseEntity<?> getRatingEventByUser(@PathVariable Integer idUser, @PathVariable Integer idEvent) {
+    public ResponseEntity<ratingevent> getRatingEventByUser(
+            @PathVariable Integer idUser,
+            @PathVariable Integer idEvent
+    ) {
         try {
-            String response = restTemplate.getForObject("http://eventosCRUD/eventosPUJ/ratingPUJ/evento/usuario/" + idUser + "/" + idEvent, String.class);
-            return ResponseEntity.ok(response);
-        } catch (Exception exepcion) {
-            throw new RuntimeException("Este es un error personalizado.");
+            ratingevent ratingEvent = restTemplate.getForObject(
+                    "http://eventosCRUD/eventosPUJ/ratingPUJ/evento/usuario/" + idUser + "/" + idEvent,
+                    ratingevent.class
+            );
+            return ResponseEntity.ok(ratingEvent);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null); // or handle error response in another way
         }
     }
 
     //    GET http://localhost:8081/eventosPUJ/eventos/activos
-    @GetMapping("/evento/activos")
+    @GetMapping("/eventos/activos")
     public ResponseEntity<?> getEventByUser() {
         try {
-            String response = restTemplate.getForObject("http://eventosCRUD/eventosPUJ/eventos/activos", String.class);
-            return ResponseEntity.ok(response);
-        } catch (Exception exepcion) {
-            throw new RuntimeException("Este es un error personalizado.");
+            ResponseEntity<List<event>> responseEntity = restTemplate.exchange(
+                    "http://eventosCRUD/eventosPUJ/eventos/activos",
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<event>>() {
+                    }
+            );
+
+            List<event> events = responseEntity.getBody();
+            return ResponseEntity.ok(events);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null); // or handle error response in another way
         }
+
     }
 
     //    POST http://localhost:8081/eventosPUJ/evento
@@ -253,6 +322,23 @@ public ResponseEntity<String> putActivity(@RequestBody activity activi) {
 
 
 }
+
+    @GetMapping("/actividad/{idEvent}")
+    public ResponseEntity<List<activity>> getActivity(@PathVariable int idEvent) {
+        String url = "http://eventosCRUD/eventosPUJ/actividadesPUJ/actividades/evento/" + idEvent;
+        try {
+            ResponseEntity<List<activity>> responseEntity = restTemplate.exchange(
+                    url,
+                    org.springframework.http.HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<activity>>() {}
+            );
+            return responseEntity;
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // or handle error response in another way
+        }
+    }
+
 
 //    POST http://localhost:8081/eventosPUJ/actividadesPUJ/actividad
 @PostMapping("/actividad/nuevo")
