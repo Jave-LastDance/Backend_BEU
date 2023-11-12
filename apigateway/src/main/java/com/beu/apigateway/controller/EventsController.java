@@ -184,7 +184,7 @@ public class EventsController {
     }
 
     //    PUT http://localhost:8081/eventosPUJ/ratingPUJ/evento/rating
-    @PutMapping("/rating/actualizar")
+    @PutMapping("/rating")
     public ResponseEntity<String> putRating(@RequestBody ratingevent ratingEvent) {
         String url = "http://eventosCRUD/eventosPUJ/ratingPUJ/evento/rating";
         try {
@@ -262,7 +262,7 @@ public class EventsController {
     }
 
     //    PUT http://localhost:8081/eventosPUJ/evento
-    @PutMapping("/evento/actualizar")
+    @PutMapping("/evento")
     public ResponseEntity<String> putnewEvent(@RequestBody event newEvent) {
         String url = "http://eventosCRUD/eventosPUJ/evento";
         try {
@@ -295,7 +295,7 @@ public class EventsController {
 //
 //
 //    PUT http://localhost:8081/eventosPUJ/actividadesPUJ/actividades
-@PutMapping("/actividad/actualizar")
+@PutMapping("/actividad")
 public ResponseEntity<String> putActivity(@RequestBody activity activi) {
     String url = "http://eventosCRUD/eventosPUJ/evento";
     try {
