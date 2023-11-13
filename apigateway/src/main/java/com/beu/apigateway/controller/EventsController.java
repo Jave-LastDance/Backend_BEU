@@ -222,7 +222,7 @@ public class EventsController {
     }
 
      //    UPDATE COMMENT
-    @PutMapping("c")
+    @PutMapping("/evento/comentario")
     public ResponseEntity<String> putComment(@RequestBody commentevent updateComment) {
         String url = "http://eventosCRUD/eventosPUJ/comentarioPUJ/comentario/evento";
         try {
@@ -276,12 +276,27 @@ public class EventsController {
     }
 
     // UPDATE EVENT STATE
-    @PutMapping("/evento/estado/centro/{idEvent}")
-    public String updateEvent(@PathVariable Integer idEvent) {
+    @PutMapping("/evento/estado/centro/{idEvent}/{status}")
+    public ResponseEntity<?> updateEvent(@PathVariable Integer idEvent,@PathVariable String status) {
+
+        String url = "http://eventosCRUD/eventosPUJ/evento/estado/" + idEvent+"/"+status;
         try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/estado/" + idEvent, String.class);
-        } catch (Exception exception) {
-            throw new RuntimeException("Este es un error personalizado.");
+            HttpHeaders headers = new HttpHeaders();
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PUT,
+                    null,
+                    String.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return new ResponseEntity<>("OK", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Datos", HttpStatus.BAD_REQUEST);
+            }
+
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -318,12 +333,12 @@ public class EventsController {
 
  //  UPDATE ACTIVITY
     @PutMapping("/actividad")
-    public ResponseEntity<String> putActivity(@RequestBody activity activi) {
-        String url = "http://eventosCRUD/eventosPUJ/evento";
+    public ResponseEntity<String> putActivity(@RequestBody List<activity>  activi) {
+        String url = "http://eventosCRUD/eventosPUJ/actividadesPUJ/actividades";
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
-            HttpEntity<activity> requestEntity = new HttpEntity<>(activi, headers);
+            HttpEntity<List<activity>> requestEntity = new HttpEntity<>(activi, headers);
 
             ResponseEntity<String> response = restTemplate.exchange(
                     url,
@@ -348,11 +363,20 @@ public class EventsController {
 
     //DELETE EVENT
     @DeleteMapping("/evento/{idEvent}")
-    public String getEventByDateStart5(@PathVariable Integer idEvent) {
+    public ResponseEntity<?> getEventByDateStart5(@PathVariable Integer idEvent) {
+
+        String url="http://eventosCRUD/eventosPUJ/evento/" + idEvent;
         try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/" + idEvent, String.class);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    url,
+                    HttpMethod.DELETE,
+                    null,
+                    String.class
+            );
+            return ResponseEntity.ok(responseEntity.getBody());
+
         } catch (Exception exception) {
-            throw new RuntimeException("Este es un error personalizado.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
         }
     }
 //
