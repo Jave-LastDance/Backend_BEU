@@ -2,6 +2,7 @@ package com.beu.apigateway.controller;
 
 import com.beu.apigateway.entity.LoginRequest;
 
+import com.beu.apigateway.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class LoginControler {
     RestTemplate restTemplate;
 
     @PostMapping("/login")
-    public ResponseEntity<?> postnewRating(@RequestBody LoginRequest request) {
+    public ResponseEntity<User> postnewRating(@RequestBody LoginRequest request) {
         try {
         String url = "http://registerservice/auth/login"; // Reemplaza 'puerto' con el puerto de tu aplicación
 
@@ -29,15 +30,18 @@ public class LoginControler {
         HttpEntity<LoginRequest> requestEntity = new HttpEntity<>(request, headers);
 
 
-        ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-            System.out.println(response.getBody());
-        return ResponseEntity.ok(response.getBody());
+        User response = restTemplate.postForEntity(url, requestEntity, User.class).getBody();
+
+        return ResponseEntity.ok(response);
 
 
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error de autenticacion", HttpStatus.OK);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
+
+
 
 
 }

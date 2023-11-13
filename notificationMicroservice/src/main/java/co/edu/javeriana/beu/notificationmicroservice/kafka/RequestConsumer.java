@@ -55,23 +55,28 @@ public class RequestConsumer {
         int userId = kafkaRequest.getUserId();
         int beaconId = kafkaRequest.getBeaconId();
 
+
         Date mostRecentNotificationTime = notificationController.getMostRecentTimeStampForUser(userId);
         Date currentTime = new Date();
 
         if (isTimeToNotify(mostRecentNotificationTime, currentTime)) {
             List<Event> events = eventController.getAllEvents(beaconId,userId);
 
-            for (Event event : events) {
-                if (isEventNotified(userId, event.getId())) {
-                    continue;
-                }
-                System.out.println(event.getName());
-                NotificationMessage notificationMessage = createNotificationMessage(tokenDevice, event);
-                Notification notificationDB = createNotificationEntity(userId, event);
+            if(!events.isEmpty()){
+                for (Event event : events) {
+                    if (isEventNotified(userId, event.getId())) {
+                        continue;
+                    }
+                    System.out.println(event.getName());
+                    NotificationMessage notificationMessage = createNotificationMessage(tokenDevice, event);
+                    Notification notificationDB = createNotificationEntity(userId, event);
+                    notificationController.saveNotification(notificationDB);
+                    firebaseNotificationController.sendNotificationByToken(notificationMessage);
+                    break;
+                    }
 
-                notificationController.saveNotification(notificationDB);
-                firebaseNotificationController.sendNotificationByToken(notificationMessage);
-                break;
+            }else {
+                System.out.println("NO HAY EVENTOS");
             }
         }
     }

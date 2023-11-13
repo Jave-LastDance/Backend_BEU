@@ -17,7 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("/notification")
+@RequestMapping("/notificacionPUJ")
 public class RequestController {
     @Autowired
     RestTemplate restTemplate;
@@ -30,12 +30,9 @@ public class RequestController {
 
     // This method handles POST requests at the "/api/v1/notifications" route.
     @PostMapping("/up")
-    public ResponseEntity<String> placeNotification(@RequestParam String tokenDevice,@RequestParam int beaconId,@RequestParam int userId) {
+    public ResponseEntity<String> placeNotification(@RequestBody Request request) {
 
-        Request request = new Request();
-        request.setBeaconId(beaconId);
-        request.setTokenDevice(tokenDevice);
-        request.setUserId(userId);
+
         // Generate a unique ID for the notification using UUID.
         request.setRequestId(UUID.randomUUID().toString());
 
@@ -45,8 +42,8 @@ public class RequestController {
         // Return a successful HTTP response with a message.
         return ResponseEntity.ok("Request sent to Kafka topic...");
     }
-
-    @GetMapping("/all/{userId}")
+    //LIST OF THE NOTIFICATIONS OF ONE USER
+    @GetMapping("/notificaciones/{userId}")
     public ResponseEntity<List<Notification>> getNotificationByUser(@PathVariable int userId) {
         String url= "http://notificationMicroservice/notificationsPUJ/notifications/user/"+userId;
         try {
@@ -65,8 +62,8 @@ public class RequestController {
         }
 
 
-
-   @GetMapping("/{notificationId}")
+    //OBJECT NOTIFICATION GIVEN A USER
+   @GetMapping("/notificacion/{notificationId}")
     public ResponseEntity<Notification> getNotificationById(@PathVariable("notificationId") int notificationId) {
         String url= "http://notificationMicroservice/notificationsPUJ/notification/"+notificationId;
       try {
@@ -77,7 +74,8 @@ public class RequestController {
         }
     }
 
-    @DeleteMapping("/{notificationId}")
+    //DELETE NOTIFICATION BY ID
+    @DeleteMapping("/notificacion/{notificationId}")
     public ResponseEntity<?> deleteNotification(@PathVariable int notificationId) {
         String url= "http://notificationMicroservice/notificationsPUJ/notification/"+notificationId;
         try {

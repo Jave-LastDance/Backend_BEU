@@ -20,9 +20,9 @@ public class PersonalizationController {
     RestTemplate restTemplate;
 
 
-    //http://localhost:8042/personalizacionPUJ/preferencias/{{nameCenter}}
-    @GetMapping("/preferencias/{idUser}")
-    public ResponseEntity<List<preferencexuser>>getByPreferenceNameCenter(@PathVariable String idUser) {
+    //LIST OF USER PREFERENCES
+    @GetMapping("/preferencias/usuario/{idUser}")
+    public ResponseEntity<List<preferencexuser>>getByPreferenceUser(@PathVariable String idUser) {
         String url = "http://Personalization/personalizacionPUJ/usuario/preferencias/" + idUser;
         try {
             ResponseEntity<List<preferencexuser>> responseEntity = restTemplate.exchange(
@@ -35,41 +35,52 @@ public class PersonalizationController {
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // or handle error response in another way
         }
-        }
+    }
 
-    //http://localhost:8042/personalizationPUJ/eventos/usuario/{{id_beacon}}/{{id_user}}
-    @GetMapping("/eventos/usuario/{id_beacon}/{id_user}")
-    public ResponseEntity<List<preferencexuser>>  getByPreferenceEventUser(@PathVariable int id_beacon, @PathVariable int id_user) {
-        String url="http://Personalization/personalizacionPUJ/eventos/usuario/" + id_beacon + "/" + id_user;
+    @GetMapping("/preferencias/centro/{nameCenter}")
+    public ResponseEntity<List<preference>>getByPreferenceNameCenter(@PathVariable String nameCenter) {
+        String url = "http://Personalization/personalizacionPUJ/preferencias/" + nameCenter;
         try {
-            ResponseEntity<List<preferencexuser>> responseEntity = restTemplate.exchange(
+            ResponseEntity<List<preference>> responseEntity = restTemplate.exchange(
                     url,
                     org.springframework.http.HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<preferencexuser>>() {}
+                    new ParameterizedTypeReference<List<preference>>() {}
             );
             return responseEntity;
         } catch (Exception exception) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // or handle error response in another way
         }
     }
 
-   // POST http://localhost:8080/personalizacionPUJ/prioridad/usuario
+   // ADD PRIORITY USER
     @PostMapping("/prioridad/usuario")
-    public ResponseEntity<?> postPrioriodad(@RequestBody List<priorityxuser> newPriority) {
+    public ResponseEntity<?> postPriority(@RequestBody List<priorityxuser> newPriority) {
         String url = "http://Personalization/personalizacionPUJ/prioridad/usuario";
         try {
             ResponseEntity<?> responseEntity = restTemplate.postForEntity(url, newPriority, String.class);
             return responseEntity;
         } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("error de creacion", HttpStatus.OK);
+            return new ResponseEntity<>("error de creacion", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //  POST PREFERENCE USER
+    @PostMapping("/usuario/preferencias")
+    public ResponseEntity<?> postPreference(@RequestBody  List<preferencexuser> newPreference) {
+        String url = "http://Personalization/personalizacionPUJ/usuario/preferencias";
+        try {
+            ResponseEntity<?> responseEntity = restTemplate.postForEntity(url, newPreference, String.class);
+            return responseEntity;
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("error de creacion", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //
-//
-//    PUT http://localhost:8080/personalizacionPUJ/prioridad/usuario
+//    UPDATE PRIORITY
     @PutMapping("/prioridad/usuario")
-    public ResponseEntity<String> putComentario(@RequestBody  List<priorityxuser> updatePriority) {
+    public ResponseEntity<String> putPriority(@RequestBody  List<priorityxuser> updatePriority) {
         String url = "http://Personalization/personalizacionPUJ/prioridad/usuario";
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -84,30 +95,17 @@ public class PersonalizationController {
             );
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                return new ResponseEntity<>("prioridad actualizadso correctamente", HttpStatus.OK);
+                return new ResponseEntity<>("OK", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Verifique los datos", HttpStatus.OK);
+                return new ResponseEntity<>("Datos", HttpStatus.BAD_REQUEST);
             }
 
         } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("comentario no actualizado", HttpStatus.OK);
+            return new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    //  POST http://localhost:8080/personalizacionPUJ/usuario/preferencias
-    @PostMapping("/usuario/preferencias")
-    public ResponseEntity<?> postPreferencias(@RequestBody  List<preferencexuser> newPreference) {
-        String url = "http://Personalization/personalizacionPUJ/usuario/preferencias";
-        try {
-            ResponseEntity<?> responseEntity = restTemplate.postForEntity(url, newPreference, String.class);
-            return responseEntity;
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("error de creacion", HttpStatus.OK);
-        }
-    }
-
-
-   // DELETE http://localhost:8080/personalizacionPUJ/usuario/preferencias
+   // DELETE PREFERENCES
    @DeleteMapping("/usuario/preferencias")
    public ResponseEntity<?> deleteNotification(@RequestBody List<preferencexuser> deletePreference) {
        String url= "http://Personalization/personalizacionPUJ/usuario/preferencias";

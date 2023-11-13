@@ -19,6 +19,7 @@ public class EventsController {
     @Autowired
     RestTemplate restTemplate;
 
+    //LIST OF ALL EVENTS
     @GetMapping("/eventos")
     public ResponseEntity<List<event>> getAllEvents() {
         try {
@@ -26,7 +27,8 @@ public class EventsController {
                     "http://eventosCRUD/eventosPUJ/eventos",
                     org.springframework.http.HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<event>>() {}
+                    new ParameterizedTypeReference<List<event>>() {
+                    }
             );
 
             List<event> events = responseEntity.getBody();
@@ -37,7 +39,7 @@ public class EventsController {
         }
     }
 
-
+    //OBJECT EVENT BY ID
     @GetMapping("/evento/{idEvent}")
     public ResponseEntity<event> getEventById(@PathVariable int idEvent) {
         try {
@@ -45,11 +47,11 @@ public class EventsController {
             return ResponseEntity.ok(event);
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // or handle error response in another way
+                    .body(null);
         }
     }
 
-    //http://localhost:8081/eventosPUJ/evento/centro/{{nameCenter}}
+    //LIST OF EVENTS ACCORDING TO THE CENTER NAME
     @GetMapping("/evento/centro/{nameCenter}")
     public ResponseEntity<List<event>> getEventsByCenter(@PathVariable String nameCenter) {
         try {
@@ -57,7 +59,8 @@ public class EventsController {
                     "http://eventosCRUD/eventosPUJ/evento/centro/" + nameCenter,
                     org.springframework.http.HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<event>>() {}
+                    new ParameterizedTypeReference<List<event>>() {
+                    }
             );
 
             List<event> events = responseEntity.getBody();
@@ -68,15 +71,16 @@ public class EventsController {
         }
     }
 
-    //http://localhost:8081/eventosPUJ/beacon/{{id_beacon}}
-    @GetMapping("/beaconlocation/{location_beacon}")
+    //LIST OF EVENTS ACCORDING TO THE LOCATION OF THE BEACON
+    @GetMapping("/ubicacionbeacon/{location_beacon}")
     public ResponseEntity<List<event>> getEventsByBeaconId(@PathVariable String location_beacon) {
         try {
             ResponseEntity<List<event>> responseEntity = restTemplate.exchange(
                     "http://eventosCRUD/eventosPUJ/beacon/" + location_beacon,
                     org.springframework.http.HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<event>>() {}
+                    new ParameterizedTypeReference<List<event>>() {
+                    }
             );
 
             List<event> events = responseEntity.getBody();
@@ -87,7 +91,7 @@ public class EventsController {
         }
     }
 
-    //http://localhost:8081/eventosPUJ/evento/estado/centro/{{status}}/{{nameCenter}}
+    //LIST OF EVENTS ACCORDING TO THE STATUS AND THE CENTER NAME
     @GetMapping("/evento/estado/centro/{status}/{nameCenter}")
     public ResponseEntity<List<event>> getEventsByStateCenter(
             @PathVariable String status,
@@ -98,120 +102,20 @@ public class EventsController {
                     "http://eventosCRUD/eventosPUJ/evento/estado/centro/" + status + "/" + nameCenter,
                     org.springframework.http.HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<event>>() {}
+                    new ParameterizedTypeReference<List<event>>() {
+                    }
             );
 
             List<event> events = responseEntity.getBody();
             return ResponseEntity.ok(events);
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // or handle error response in another way
+                    .body(null);
         }
     }
 
-    //http://localhost:8081/eventosPUJ/evento/estado/{{idEvent}}
-    @PutMapping("/evento/estado/centro/{idEvent}")
-    public String updateevent(@PathVariable Integer idEvent) {
-        try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/estado/" + idEvent, String.class);
-        } catch (Exception exception) {
-            throw new RuntimeException("Este es un error personalizado.");
-        }
-
-    }
-
-    //http://localhost:8081/eventosPUJ/evento/{{idEvent}}
-    @DeleteMapping("/evento/estado/centro/{idEvent}")
-    public String getEventByDateStart5(@PathVariable Integer idEvent) {
-        try {
-            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/" + idEvent, String.class);
-        } catch (Exception exception) {
-            throw new RuntimeException("Este es un error personalizado.");
-        }
-    }
-
-    //http://localhost:8081/eventosPUJ/evento/rating
-    @PostMapping("/evento/nuevo/rating")
-    public ResponseEntity<String> postnewRating(@RequestBody ratingevent ratingEvent) {
-        String url = "http://eventosCRUD/eventosPUJ/ratingPUJ/evento/rating";
-        try {
-            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, ratingEvent, String.class);
-            return responseEntity;
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Ya calificaste el evento. Puedes modificar la calificacion", HttpStatus.OK);
-        }
-    }
-
-
-    //    POST http://localhost:8081/eventosPUJ/comentarioPUJ/comentario/evento
-    @PostMapping("/evento/nuevo/comment")
-    public ResponseEntity<?> postnewComment(@RequestBody commentevent comment) {
-        String url = "http://eventosCRUD/eventosPUJ/comentarioPUJ/comentario/evento";
-        try {
-            ResponseEntity<?> responseEntity = restTemplate.postForEntity(url, comment, String.class);
-            return responseEntity;
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Ya calificaste el evento. Puedes modificar la calificacion", HttpStatus.OK);
-        }
-    }
-//
-//
-//    PUT http://localhost:8081/eventosPUJ/comentarioPUJ/comentario/evento
-    @PutMapping("/comentario/actualizar")
-    public ResponseEntity<String> putComentario(@RequestBody commentevent cooment) {
-        String url = "http://eventosCRUD/eventosPUJ/comentarioPUJ/comentario/evento";
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Type", "application/json");
-            HttpEntity<commentevent> requestEntity = new HttpEntity<>(cooment, headers);
-
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.PUT,
-                    requestEntity,
-                    String.class
-            );
-
-            if (response.getStatusCode() == HttpStatus.OK) {
-                return new ResponseEntity<>("comentarios actualizadso correctamente", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Verifique los datos del comentario", HttpStatus.OK);
-            }
-
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("comentario no actualizado", HttpStatus.OK);
-        }
-    }
-
-    //    PUT http://localhost:8081/eventosPUJ/ratingPUJ/evento/rating
-    @PutMapping("/rating")
-    public ResponseEntity<String> putRating(@RequestBody ratingevent ratingEvent) {
-        String url = "http://eventosCRUD/eventosPUJ/ratingPUJ/evento/rating";
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Type", "application/json");
-            HttpEntity<ratingevent> requestEntity = new HttpEntity<>(ratingEvent, headers);
-
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.PUT,
-                    requestEntity,
-                    String.class
-            );
-
-            if (response.getStatusCode() == HttpStatus.OK) {
-                return new ResponseEntity<>("comentarios actualizadso correctamente", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Verifique los datos del comentario", HttpStatus.OK);
-            }
-
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("comentario no actualizado", HttpStatus.OK);
-        }
-    }
-
-    //    GET http://localhost:8081/eventosPUJ/ratingPUJ/evento/usuario/{{idUser}}/{{idEvent}}
-    @GetMapping("/evento/usuario/{idUser}/{idEvent}")
+    // RATING OF A USER GIVEN THE ID OF THE USER AND THE EVENT
+    @GetMapping("/califacion/evento/usuario/{idUser}/{idEvent}")
     public ResponseEntity<ratingevent> getRatingEventByUser(
             @PathVariable Integer idUser,
             @PathVariable Integer idEvent
@@ -224,11 +128,11 @@ public class EventsController {
             return ResponseEntity.ok(ratingEvent);
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // or handle error response in another way
+                    .body(null);
         }
     }
 
-    //    GET http://localhost:8081/eventosPUJ/eventos/activos
+    //   LIST OF EVENT WITH STATUS ACTIVO
     @GetMapping("/eventos/activos")
     public ResponseEntity<?> getEventByUser() {
         try {
@@ -249,19 +153,141 @@ public class EventsController {
 
     }
 
-    //    POST http://localhost:8081/eventosPUJ/evento
-    @PostMapping("/evento/nuevo")
+    //LIST OF ACTIVITIES OF AN EVENT GIVEN THE ID OF THE EVENT
+    @GetMapping("/actividad/{idEvent}")
+    public ResponseEntity<List<activity>> getActivity(@PathVariable int idEvent) {
+        String url = "http://eventosCRUD/eventosPUJ/actividadesPUJ/actividades/evento/" + idEvent;
+        try {
+            ResponseEntity<List<activity>> responseEntity = restTemplate.exchange(
+                    url,
+                    org.springframework.http.HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<activity>>() {
+                    }
+            );
+            return responseEntity;
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    //ADD A NEW RATING GIVEN THE REQUEST BODY
+    @PostMapping("/evento/rating")
+    public ResponseEntity<String> postnewRating(@RequestBody ratingevent ratingEvent) {
+        String url = "http://eventosCRUD/eventosPUJ/ratingPUJ/evento/rating";
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, ratingEvent, String.class);
+            return responseEntity;
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("Existe", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    // ADD NEW COMMENT
+    @PostMapping("/evento/comentario")
+    public ResponseEntity<?> postnewComment(@RequestBody commentevent comment) {
+        String url = "http://eventosCRUD/eventosPUJ/comentarioPUJ/comentario/evento";
+        try {
+            ResponseEntity<?> responseEntity = restTemplate.postForEntity(url, comment, String.class);
+            return responseEntity;
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("Existe", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //    ADD NEW EVENT
+    @PostMapping("/evento")
     public ResponseEntity<String> postnewEvent(@RequestBody event newEvent) {
         String url = "http://eventosCRUD/eventosPUJ/evento";
         try {
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, newEvent, String.class);
             return responseEntity;
         } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Verifique los datos del evento", HttpStatus.OK);
+            return new ResponseEntity<>("Datos", HttpStatus.BAD_REQUEST);
         }
     }
 
-    //    PUT http://localhost:8081/eventosPUJ/evento
+    //  ADD NEW ACTIVITY
+    @PostMapping("/evento/actividad/")
+    public ResponseEntity<String> postnewActivity(@RequestBody activity newActivity) {
+        String url = "http://eventosCRUD/eventosPUJ/actividadesPUJ/actividad";
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, newActivity, String.class);
+            return responseEntity;
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("Datos", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+     //    UPDATE COMMENT
+    @PutMapping("c")
+    public ResponseEntity<String> putComment(@RequestBody commentevent updateComment) {
+        String url = "http://eventosCRUD/eventosPUJ/comentarioPUJ/comentario/evento";
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            HttpEntity<commentevent> requestEntity = new HttpEntity<>(updateComment,headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PUT,
+                    requestEntity,
+                    String.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return new ResponseEntity<>("OK", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Datos", HttpStatus.BAD_REQUEST);
+            }
+
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //    UPDATE RATING
+    @PutMapping("/rating")
+    public ResponseEntity<String> putRating(@RequestBody ratingevent ratingEvent) {
+        String url = "http://eventosCRUD/eventosPUJ/ratingPUJ/evento/rating";
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            HttpEntity<ratingevent> requestEntity = new HttpEntity<>(ratingEvent, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PUT,
+                    requestEntity,
+                    String.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return new ResponseEntity<>("OK", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Datos", HttpStatus.BAD_REQUEST);
+            }
+
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // UPDATE EVENT STATE
+    @PutMapping("/evento/estado/centro/{idEvent}")
+    public String updateEvent(@PathVariable Integer idEvent) {
+        try {
+            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/estado/" + idEvent, String.class);
+        } catch (Exception exception) {
+            throw new RuntimeException("Este es un error personalizado.");
+        }
+
+    }
+
+
+    //    UPDATE EVENT
     @PutMapping("/evento")
     public ResponseEntity<String> putnewEvent(@RequestBody event newEvent) {
         String url = "http://eventosCRUD/eventosPUJ/evento";
@@ -278,79 +304,57 @@ public class EventsController {
             );
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                return new ResponseEntity<>("Evento actualizado correctamente", HttpStatus.OK);
+                return new ResponseEntity<>("OK", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Verifique los datos del evento", HttpStatus.OK);
+                return new ResponseEntity<>("Datos", HttpStatus.BAD_REQUEST);
             }
 
         } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("evento incorrecto", HttpStatus.OK);
+            return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 
     }
-//
-//
-//    DELETE http://localhost:8081/eventosPUJ/evento/{{idEvent}}
-//
-//
-//    PUT http://localhost:8081/eventosPUJ/actividadesPUJ/actividades
-@PutMapping("/actividad")
-public ResponseEntity<String> putActivity(@RequestBody activity activi) {
-    String url = "http://eventosCRUD/eventosPUJ/evento";
-    try {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        HttpEntity<activity> requestEntity = new HttpEntity<>(activi, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.PUT,
-                requestEntity,
-                String.class
-        );
-
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return new ResponseEntity<>("actividad actualizado correctamente", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Verifique los datos de la actividad", HttpStatus.OK);
-        }
-
-    } catch (HttpClientErrorException ex) {
-        return new ResponseEntity<>("actividad incorrecto", HttpStatus.OK);
-    }
-
-
-}
-
-    @GetMapping("/actividad/{idEvent}")
-    public ResponseEntity<List<activity>> getActivity(@PathVariable int idEvent) {
-        String url = "http://eventosCRUD/eventosPUJ/actividadesPUJ/actividades/evento/" + idEvent;
+ //  UPDATE ACTIVITY
+    @PutMapping("/actividad")
+    public ResponseEntity<String> putActivity(@RequestBody activity activi) {
+        String url = "http://eventosCRUD/eventosPUJ/evento";
         try {
-            ResponseEntity<List<activity>> responseEntity = restTemplate.exchange(
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            HttpEntity<activity> requestEntity = new HttpEntity<>(activi, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
                     url,
-                    org.springframework.http.HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<activity>>() {}
+                    HttpMethod.PUT,
+                    requestEntity,
+                    String.class
             );
-            return responseEntity;
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return new ResponseEntity<>("OK", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Datos", HttpStatus.BAD_REQUEST);
+            }
+
         } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // or handle error response in another way
+            return new ResponseEntity<>("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+    }
+
+
+    //DELETE EVENT
+    @DeleteMapping("/evento/{idEvent}")
+    public String getEventByDateStart5(@PathVariable Integer idEvent) {
+        try {
+            return restTemplate.getForObject("http://eventosCRUD/eventosPUJ/evento/" + idEvent, String.class);
+        } catch (Exception exception) {
+            throw new RuntimeException("Este es un error personalizado.");
         }
     }
-
-
-//    POST http://localhost:8081/eventosPUJ/actividadesPUJ/actividad
-@PostMapping("/actividad/nuevo")
-public ResponseEntity<String> postnewEvent(@RequestBody activity activi) {
-    String url = "http://eventosCRUD/eventosPUJ/actividadesPUJ/actividad";
-    try {
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, activi, String.class);
-        return responseEntity;
-    } catch (HttpClientErrorException ex) {
-        return new ResponseEntity<>("Verifique los datos del evento", HttpStatus.OK);
-    }
-}
 //
 //
 //    POST http://localhost:8081/eventosPUJ/actividadesPUJ/actividades

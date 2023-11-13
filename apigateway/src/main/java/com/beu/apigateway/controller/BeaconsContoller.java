@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("/beacon")
+@RequestMapping("/beaconPUJ")
 public class BeaconsContoller {
 
    @Autowired
     RestTemplate restTemplate;
 
 
-    @GetMapping("/neighbors")
+    @GetMapping("/vecinos")
     public String getneighbors(@RequestParam String beaconId) {
         String response = restTemplate.getForObject("http://beaconsservice/beacons/neighbors?beaconId={beaconId}", String.class,beaconId);
         return response;
