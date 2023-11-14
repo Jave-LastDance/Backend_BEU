@@ -1,11 +1,37 @@
 version: '3'
 
-services:    
+services:
   eurekaserver:
     build: ./eurekaserver
     ports:
       - "8761:8761"
     restart: always
+    networks:
+      - redtesis
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+    networks:
+      - redtesis
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    expose:
+      - "9093"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_BROKER_ID: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    depends_on:
+      - zookeeper
+    networks:
+      - redtesis
 
   beacons:
     build: ./beacons
@@ -14,6 +40,8 @@ services:
     depends_on:
       - eurekaserver
     restart: always
+    networks:
+      - redtesis
 
   eventmicroservice:
     build: ./eventmicroservice
@@ -22,6 +50,8 @@ services:
     depends_on:
       - eurekaserver
     restart: always
+    networks:
+      - redtesis
 
   login:
     build: ./spring-boot-jwt-authentication-1.0
@@ -30,6 +60,8 @@ services:
     depends_on:
       - eurekaserver
     restart: always
+    networks:
+      - redtesis
 
   personaliation:
     build: ./personalizationService
@@ -38,14 +70,19 @@ services:
     depends_on:
       - eurekaserver
     restart: always
-  
+    networks:
+      - redtesis
+
   notifiacacion:
     build: ./notificationMicroservice
     ports:
       - "8052:8052"
     depends_on:
       - eurekaserver
+      - kafka
     restart: always
+    networks:
+      - redtesis
 
   apigateway:
     build: ./apigateway
@@ -57,4 +94,12 @@ services:
       - eventmicroservice
       - login
       - personaliation
+      - kafka
+      - zookeeper
     restart: always
+    networks:
+      - redtesis
+
+networks:
+  redtesis:
+    driver: bridge
