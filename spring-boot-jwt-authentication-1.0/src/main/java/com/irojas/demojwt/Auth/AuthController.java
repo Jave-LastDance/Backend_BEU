@@ -1,8 +1,9 @@
 package com.irojas.demojwt.Auth;
 
-import com.irojas.demojwt.User.EventosxPersona;
+import com.irojas.demojwt.User.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,17 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class AuthController {
 
+    public class ErrorResponse {
+        private String message;
+
+        public ErrorResponse(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
 
     private final AuthService authService;
 
@@ -31,8 +43,12 @@ public class AuthController {
         HttpEntity<String> requestEntity = new HttpEntity<>(request.username, headers);
 
 
-        ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        return ResponseEntity.ok(response.getBody());
+        ResponseEntity<UserResponse> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, UserResponse.class);
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            return ResponseEntity.ok(responseEntity.getBody());
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
     }
 
     @PostMapping(value = "register")

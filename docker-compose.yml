@@ -1,0 +1,60 @@
+version: '3'
+
+services:    
+  eurekaserver:
+    build: ./eurekaserver
+    ports:
+      - "8761:8761"
+    restart: always
+
+  beacons:
+    build: ./beacons
+    ports:
+      - "8090:8090"
+    depends_on:
+      - eurekaserver
+    restart: always
+
+  eventmicroservice:
+    build: ./eventmicroservice
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eurekaserver
+    restart: always
+
+  login:
+    build: ./spring-boot-jwt-authentication-1.0
+    ports:
+      - "8093:8092"
+    depends_on:
+      - eurekaserver
+    restart: always
+
+  personaliation:
+    build: ./personalizationService
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eurekaserver
+    restart: always
+  
+  notifiacacion:
+    build: ./notificationMicroservice
+    ports:
+      - "8052:8052"
+    depends_on:
+      - eurekaserver
+    restart: always
+
+  apigateway:
+    build: ./apigateway
+    ports:
+      - "8889:8888"
+    depends_on:
+      - eurekaserver
+      - beacons
+      - eventmicroservice
+      - login
+      - personaliation
+    restart: always
