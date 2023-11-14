@@ -28,9 +28,9 @@ public class preferenceUserController {
                 return  new ResponseEntity<>("Se agregaron correctamente", HttpStatus.OK);
         }
 
-        @DeleteMapping("/preferencias")
-        public ResponseEntity<String> deletePreference(@RequestBody List<preferencexuser> deletePreference){
-                preferenceUserService.deletePreference(deletePreference);
+        @DeleteMapping("/preferencias/{iduser}")
+        public ResponseEntity<String> deletePreference(@PathVariable Integer  iduser){
+                preferenceUserService.deletePreference(iduser);
                 return  new ResponseEntity<>("Se eliminaron correctamente", HttpStatus.OK);
         }
 

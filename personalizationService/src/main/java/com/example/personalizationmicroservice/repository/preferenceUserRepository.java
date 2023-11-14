@@ -13,7 +13,7 @@ public interface preferenceUserRepository extends JpaRepository<preferencexuser,
     @Query(value = "SELECT * FROM preferenceuser WHERE id_user=?1", nativeQuery = true)
     List<preferencexuser> getAllByIdUser(Integer idUser);
 
-    @Query(value = "DELETE FROM preferenceuser WHERE id_user=?1 AND id_preference_user=?2", nativeQuery = true)
-    void deleteByIdUserAndIdPreference(Integer idUser, Integer idPreferences);
+    @Query(value = "DELETE FROM preferenceuser WHERE id_user=?1", nativeQuery = true)
+    void deleteByIdUser(Integer idUser);
 
 }

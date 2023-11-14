@@ -24,10 +24,9 @@ public class preferenceUserService {
         }
     }
 
-    public void deletePreference (List<preferencexuser> deletePreferences){
-        for(preferencexuser aux: deletePreferences){
-        preferenceUserRepository.deleteByIdUserAndIdPreference(aux.getId_user(),aux.getId_preference_user());
-        }
+    public void deletePreference (int deletePreferences){
+        preferenceUserRepository.deleteByIdUser(deletePreferences);
+
     }
 
 

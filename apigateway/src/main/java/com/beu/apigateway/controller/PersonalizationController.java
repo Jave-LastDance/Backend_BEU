@@ -106,17 +106,16 @@ public class PersonalizationController {
     }
 
    // DELETE PREFERENCES
-   @DeleteMapping("/usuario/preferencias")
-   public ResponseEntity<?> deleteNotification(@RequestBody List<preferencexuser> deletePreference) {
-       String url= "http://Personalization/personalizacionPUJ/usuario/preferencias";
+   @DeleteMapping("/usuario/preferencias/{iduser}")
+   public ResponseEntity<?> deleteNotification(@PathVariable int  iduser) {
+       String url= "http://Personalization/personalizacionPUJ/usuario/preferencias/"+iduser;
        HttpHeaders headers = new HttpHeaders();
-       headers.add("Content-Type", "application/json");
-       HttpEntity<List<preferencexuser>> requestEntity = new HttpEntity<>(deletePreference, headers);
+
        try {
            ResponseEntity<String> responseEntity = restTemplate.exchange(
                    url,
                    HttpMethod.DELETE,
-                   requestEntity,
+                   null,
                    String.class
            );
            return ResponseEntity.ok(responseEntity.getBody());
